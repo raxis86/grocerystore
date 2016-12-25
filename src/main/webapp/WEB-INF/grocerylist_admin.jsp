@@ -12,8 +12,7 @@
   </head>
   <body>
     Здравствуй, глубокоуважаемый АДМИН!
-    <div> <a href="">Вход</a> </div>
-    <div> <a href="">Регистрация</a> </div>
+    <div> <a href="/Logout">Выход</a> </div>
     <div>
       <nav>
         <ul id="menu">

@@ -1,22 +1,84 @@
-<!--<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://java.sun.com/xml/ns/javaee"
          xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          id="WebApp_ID" version="2.5">
 <servlet>
-    <servlet-name>MyServlet</servlet-name>
-    <servlet-class>MyServlet</servlet-class>
+    <servlet-name>GroceryList</servlet-name>
+    <servlet-class>Controllers.GroceryControllers.GroceryList</servlet-class>
 </servlet>
 <servlet-mapping>
-    <servlet-name>MyServlet</servlet-name>
-    <url-pattern>/</url-pattern>
+    <servlet-name>GroceryList</servlet-name>
+    <url-pattern>/GroceryList</url-pattern>
 </servlet-mapping>
-</web-app>-->
-<!--
-    <resource-ref>
-        DB Connection
-        <res-ref-name>jdbc/grocerystore</res-ref-name>
-        <res-type>javax.sql.DataSource</res-type>
-        <res-auth>Container</res-auth>
-    </resource-ref>-->
+    <servlet>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>Controllers.AccountControllers.Login</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Login</servlet-name>
+        <url-pattern>/Login</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>GroceryListAdmin</servlet-name>
+        <servlet-class>Controllers.GroceryControllers.GroceryListAdmin</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GroceryListAdmin</servlet-name>
+        <url-pattern>/GroceryListAdmin</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>Logout</servlet-name>
+        <servlet-class>Controllers.AccountControllers.Logout</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Logout</servlet-name>
+        <url-pattern>/Logout</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>CartAdd</servlet-name>
+        <servlet-class>Controllers.CartController.CartAdd</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CartAdd</servlet-name>
+        <url-pattern>/CartAdd</url-pattern>
+    </servlet-mapping>
+
+
+
+    <filter>
+        <filter-name>AuthorizationFilter</filter-name>
+        <filter-class>Filters.AuthorizationFilter</filter-class>
+        <init-param>
+            <param-name>test-param</param-name>
+            <param-value>This parameter is for testing.</param-value>
+        </init-param>
+    </filter>
+    <filter>
+        <filter-name>AdminFilter</filter-name>
+        <filter-class>Filters.AdminFilter</filter-class>
+  <!--      <init-param>
+            <param-name>test-param</param-name>
+            <param-value>This parameter is for testing.</param-value>
+        </init-param>-->
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthorizationFilter</filter-name>
+        <url-pattern>/GroceryListAdmin</url-pattern>
+        <url-pattern>/CartAdd</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AdminFilter</filter-name>
+        <url-pattern>/GroceryListAdmin</url-pattern>
+    </filter-mapping>
+  <!--  <filter>
+        <filter-name>AuthorizationFilter</filter-name>
+        <filter-class>Filters.AuthorizationFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>AuthorizationFilter</filter-name>
+        <url-pattern>/grocerylist*.jsp</url-pattern>
+    </filter-mapping>-->
+</web-app>

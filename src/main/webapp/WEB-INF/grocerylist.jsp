@@ -8,6 +8,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<c:set var="req" value="${pageContext.request}" />
 <html>
   <head>
     <title>Каталог товаров</title>
@@ -34,6 +35,15 @@
       <tr>
         <td>${item.getName()}</td>
         <td>${item.getPrice()}</td>
+        <c:if test="${!empty sessionScope.user}" >
+          <td>
+            <form action="/CartAdd" method="post">
+              <input type="hidden" name="groceryid" value="${item.getId()}">
+              <%--<input type="hidden" name="returnurl" value="${req.requestURI}">--%>
+              <input type="submit" value="Добавить в корзину">
+            </form>
+          </td>
+        </c:if>
        <%-- <td><a href="studentdel.jsp?id=<%=s.getId().toString()%>">Удалить</a></td>
         <td><a href="studentupd.jsp?id=<%=s.getId().toString()%>">Редактировать</a></td>--%>
       </tr>

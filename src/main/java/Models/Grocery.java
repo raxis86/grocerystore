@@ -98,6 +98,28 @@ public class Grocery implements IRepo<Grocery> {
         return groceryList;
     }
 
+    @Override
+    public Grocery select(UUID id) {
+        Grocery grocery = null;
+        try(PreparedStatement statement = Tool.getConnection().prepareStatement(GROCERY_PREP_SELECTONE_QUERY)) {
+            statement.setObject(1,id.toString());
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.next()){
+                grocery = new Grocery();
+                grocery.setId(UUID.fromString(resultSet.getString("ID")));
+                grocery.setParentid(UUID.fromString(resultSet.getString("PARENTID")));
+                grocery.setIscategory(resultSet.getBoolean("ISCATEGORY"));
+                grocery.setName(resultSet.getString("NAME"));
+                grocery.setQuantity(resultSet.getInt("QUANTITY"));
+                grocery.setPrice(resultSet.getBigDecimal("PRICE"));
+            }
+        } catch (SQLException e) {
+            logger.error("Cant select Grocery!", e);
+            e.printStackTrace();
+        }
+        return grocery;
+    }
+
     public void insert() {
         try(PreparedStatement statement = Tool.getConnection().prepareStatement(GROCERY_PREP_INSERT_QUERY);) {
             statement.setObject(1,this.id.toString());

@@ -8,9 +8,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>$Title$</title>
+    <title>Доступ запрещен!</title>
 </head>
 <body>
-$END$
+    Доступ к запрашиваемому ресурсу закрыт!
 </body>
 </html>

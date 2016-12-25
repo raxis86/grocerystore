@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: raxis
@@ -11,8 +12,13 @@
     <title>Grocery Store</title>
   </head>
   <body>
-    <div> <a href="/Login">Вход</a> </div>
-    <div> <a href="">Регистрация</a> </div>
+    <c:if test="${empty sessionScope.user}" >
+      <div> <a href="/Login">Вход</a> </div>
+      <div> <a href="">Регистрация</a> </div>
+    </c:if>
+    <c:if test="${!empty sessionScope.user}" >
+      <div> <a href="/Logout">Выход</a> </div>
+    </c:if>
     <div>
       <nav>
         <ul id="menu">

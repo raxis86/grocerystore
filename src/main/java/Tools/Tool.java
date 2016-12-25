@@ -1,13 +1,18 @@
 package Tools;
 
+import Interfaces.IRepo;
 import Models.Grocery;
+import Models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.jws.soap.SOAPBinding;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.math.BigDecimal;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -60,27 +65,76 @@ public class Tool {
         }
     }
 
+    public static String computeHash(String password){
+        MessageDigest messageDigest=null;
+        byte[] b=null;
+        String str="";
+        try {
+            messageDigest = MessageDigest.getInstance("SHA-1");
+            messageDigest.reset();
+            messageDigest.update(password.getBytes());
+
+            b = messageDigest.digest();
+            StringBuffer sb = new StringBuffer(b.length * 2);
+            for (int i = 0; i < b.length; i++){
+                int v = b[i] & 0xff;
+                if (v < 16) {
+                    sb.append('0');
+                }
+                sb.append(Integer.toHexString(v));
+            }
+
+            str=sb.toString().toUpperCase();
+
+        } catch (NoSuchAlgorithmException e) {
+            logger.error("Cant hash generate!",e);
+            e.printStackTrace();
+        }
+
+        return str;
+    }
+
     public static void main(String[] args) {
-        Grocery grocery = new Grocery();
+       /* Grocery grocery = new Grocery();
         List<Grocery> groceryList = grocery.select();
 
         for(Grocery g:groceryList){
             System.out.println(g.getId()+" " + g.getParentid() + " " + g.isIscategory() + " " + g.getName() + " " + g.getQuantity() + " " + g.getPrice());
         }
 
-        /*grocery.setId(UUID.randomUUID());
+        grocery.setId(UUID.randomUUID());
         grocery.setParentid(new UUID(0L,0L));
         grocery.setIscategory(false);
         grocery.setQuantity(100);
         grocery.setName("banana");
         grocery.setPrice(BigDecimal.valueOf(10.25));
-        grocery.insert();*/
+        grocery.insert();
 
-        /*Grocery grocery1 = groceryList.get(0);
+        Grocery grocery1 = groceryList.get(0);
         grocery1.setPrice(BigDecimal.valueOf(89.99));
-        grocery1.update();*/
+        grocery1.update();
 
-        /*groceryList.get(2).delete();*/
+        groceryList.get(2).delete();*/
+
+        /*User user = new User();
+        user.setId(UUID.randomUUID());
+        user.setRoleID(UUID.fromString("5fe1ceeb-119f-4437-8f48-6d03949a5f8b"));
+        user.setName("user2");
+        user.setEmail("user2@mail.ru");
+        user.setPassword(computeHash("1qaz2wsx"));
+        user.insert();*/
+
+        //User user = new User().select(UUID.fromString("51f9d052-323e-49c1-a88e-208530f88d5d"));
+
+        //System.out.println(user.getPassword());
+        //user.setPassword(computeHash("yamaha"));
+        //System.out.println(user.getPassword().toString());
+        //user.update();
+        //System.out.println(computeHash("yamaha"));
+        /*if(computeHash("1qaz2wsx").equals(user.getPassword())){
+            System.out.println(user.getName());
+        }*/
+
 
     }
 

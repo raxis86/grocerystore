@@ -17,8 +17,13 @@ import java.util.UUID;
 /**
  * Created by raxis on 25.12.2016.
  */
-public class CartAdd extends HttpServlet {
-    private static final Logger logger = LoggerFactory.getLogger(CartAdd.class);
+public class CartRemove extends HttpServlet {
+    private static final Logger logger = LoggerFactory.getLogger(CartRemove.class);
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doPost(req,resp);
+    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -29,24 +34,15 @@ public class CartAdd extends HttpServlet {
         if(grocery!=null){
             HttpSession session = req.getSession();
             Cart cart = (Cart)session.getAttribute("cart");
-            if(cart==null){
+/*            if(cart==null){
                 cart=new Cart();
                 session.setAttribute("cart",cart);
-            }
-            cart.addItem(grocery,1);
+            }*/
+            cart.removeItem(grocery);
         }
         //String str=req.getParameter("returnurl");
         //RequestDispatcher rd=req.getRequestDispatcher(req.getParameter("returnurl"));
-        RequestDispatcher rd=req.getRequestDispatcher("/GroceryList");
+        RequestDispatcher rd=req.getRequestDispatcher("/CartList");
         rd.forward(req,resp);
     }
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
-
-        //HttpSession session = req.getSession();
-        //session.setAttribute("");
-    }
-
 }

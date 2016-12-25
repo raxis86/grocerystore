@@ -22,6 +22,11 @@ public class GroceryList extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(GroceryList.class);
 
     @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req,resp);
+    }
+
+    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 

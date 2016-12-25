@@ -11,48 +11,50 @@
 <c:set var="req" value="${pageContext.request}" />
 <html>
   <head>
-    <title>Каталог товаров</title>
+    <title>Корзина покупок</title>
   </head>
   <body>
     <%--<div> <a href="">Вход</a> </div>
     <div> <a href="">Регистрация</a> </div>--%>
-    Привет, анон!
     <div>
       <nav>
         <ul id="menu">
-          <li><a href="">Главная</a></li>
-          <li><a href="">Каталог товаров</a></li>
+          <li><a href="index.jsp">Главная</a></li>
+          <li><a href="/GroceryList">Каталог товаров</a></li>
         </ul>
 
       </nav>
     </div>
-    <c:if test="${!empty sessionScope.user}" >
-      <div> <a href="/CartList">Корзина покупок</a> </div>
-    </c:if>
     <Table>
       <tr>
         <th>Наименование</th>
         <th>Цена</th>
+        <th>Количество</th>
+        <th></th>
       </tr>
-      <c:forEach items="${groceryList}" var="item">
+      <c:forEach items="${cart.getMap()}" var="item">
       <tr>
-        <td>${item.getName()}</td>
-        <td>${item.getPrice()}</td>
-        <c:if test="${!empty sessionScope.user}" >
-          <td>
-            <form action="/CartAdd" method="post">
-              <input type="hidden" name="groceryid" value="${item.getId()}">
+        <td>${item.key.getName()}</td>
+        <td>${item.key.getPrice()}</td>
+        <td>${item.value}</td>
+        <td>
+          <form action="/CartRemove" method="post">
+            <input type="hidden" name="groceryid" value="${item.key.getId()}">
               <%--<input type="hidden" name="returnurl" value="${req.requestURI}">--%>
-              <input type="submit" value="Добавить в корзину">
-            </form>
-          </td>
-        </c:if>
+            <input type="submit" value="Удалить из корзины">
+          </form>
+        </td>
        <%-- <td><a href="studentdel.jsp?id=<%=s.getId().toString()%>">Удалить</a></td>
         <td><a href="studentupd.jsp?id=<%=s.getId().toString()%>">Редактировать</a></td>--%>
       </tr>
       </br>
       </c:forEach>
     </Table>
+    <br>
+    <div>Итого:${totalprice}</div>
+    <br>
+    <div> <a href="/GroceryList">Продолжить покупки</a> </div>
+    <div> <a href="/OrderAdd">Оформить заказ</a> </div>
 
       <%--<c:forEach items="${groceryList}" var="item">
         ${item}<br>

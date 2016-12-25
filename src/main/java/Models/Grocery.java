@@ -156,4 +156,42 @@ public class Grocery implements IRepo<Grocery> {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result=prime*result+(int)id.getLeastSignificantBits();
+        result=prime*result+(int)parentid.getMostSignificantBits();
+        int i=iscategory==true ? 1 : 0;
+        result=prime*result+i;
+        result=prime*result+name.hashCode();
+        result=prime*result+quantity;
+        result=prime*result+price.toBigInteger().intValue();
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Grocery other = (Grocery) obj;
+        if (!id.equals(other.id))
+            return false;
+        if (!parentid.equals(other.parentid))
+            return false;
+        if (iscategory != other.iscategory)
+            return false;
+        if (!name.equals(other.name))
+            return false;
+        if (quantity != other.quantity)
+            return false;
+        if (!price.equals(other.price))
+            return false;
+        return true;
+    }
 }

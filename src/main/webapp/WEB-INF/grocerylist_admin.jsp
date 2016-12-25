@@ -11,13 +11,14 @@
     <title>Grocery Store</title>
   </head>
   <body>
-    <div> <a href="/Login">Вход</a> </div>
+    Здравствуй, глубокоуважаемый АДМИН!
+    <div> <a href="">Вход</a> </div>
     <div> <a href="">Регистрация</a> </div>
     <div>
       <nav>
         <ul id="menu">
-          <li><a href="">Главная</a></li>
-          <li><a href="/GroceryList">Каталог товаров</a></li>
+          <li><a href="/">Главная</a></li>
+          <li><a href="">Каталог товаров</a></li>
         </ul>
 
       </nav>

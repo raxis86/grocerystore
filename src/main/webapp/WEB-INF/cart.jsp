@@ -20,7 +20,7 @@
       <nav>
         <ul id="menu">
           <li><a href="index.jsp">Главная</a></li>
-          <li><a href="/GroceryList">Каталог товаров</a></li>
+          <li><a href="/GroceryListController">Каталог товаров</a></li>
         </ul>
 
       </nav>
@@ -53,7 +53,7 @@
     <br>
     <div>Итого:${totalprice}</div>
     <br>
-    <div> <a href="/GroceryList">Продолжить покупки</a> </div>
+    <div> <a href="/GroceryListController">Продолжить покупки</a> </div>
     <div> <a href="/OrderAdd">Оформить заказ</a> </div>
 
       <%--<c:forEach items="${groceryList}" var="item">

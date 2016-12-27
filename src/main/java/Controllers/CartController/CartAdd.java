@@ -24,7 +24,7 @@ public class CartAdd extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        Grocery grocery = new Grocery().select(UUID.fromString(req.getParameter("groceryid")));
+        Grocery grocery = new Grocery().selectOne(UUID.fromString(req.getParameter("groceryid")));
 
         if(grocery!=null){
             HttpSession session = req.getSession();
@@ -37,7 +37,7 @@ public class CartAdd extends HttpServlet {
         }
         //String str=req.getParameter("returnurl");
         //RequestDispatcher rd=req.getRequestDispatcher(req.getParameter("returnurl"));
-        RequestDispatcher rd=req.getRequestDispatcher("/GroceryList");
+        RequestDispatcher rd=req.getRequestDispatcher("/GroceryListController");
         rd.forward(req,resp);
     }
 

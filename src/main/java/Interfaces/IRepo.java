@@ -8,7 +8,7 @@ import java.util.UUID;
  */
 public interface IRepo<T> {
     public List<T> select();
-    public T select(UUID id);
+    public T selectOne(UUID id);
     public void insert();
     public void delete();
     public void update();

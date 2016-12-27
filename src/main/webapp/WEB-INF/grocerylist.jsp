@@ -16,7 +16,16 @@
   <body>
     <%--<div> <a href="">Вход</a> </div>
     <div> <a href="">Регистрация</a> </div>--%>
-    Привет, анон!
+    <c:if test="${empty sessionScope.user}" >
+    <div>Привет, анон!</div>
+    <div> <a href="/Login">Вход</a> </div>
+    <div> <a href="">Регистрация</a> </div>
+    </c:if>
+    <c:if test="${!empty sessionScope.user}" >
+    <div>Здравствуйте, ${sessionScope.user.getName()}!</div>
+    <div> <a href="/Logout">Выход</a> </div>
+    </c:if>
+
     <div>
       <nav>
         <ul id="menu">
@@ -28,6 +37,7 @@
     </div>
     <c:if test="${!empty sessionScope.user}" >
       <div> <a href="/CartList">Корзина покупок</a> </div>
+      <div> <a href="/OrderList">Список заказов</a> </div>
     </c:if>
     <Table>
       <tr>

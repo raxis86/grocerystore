@@ -23,7 +23,7 @@
       <nav>
         <ul id="menu">
           <li><a href="">Главная</a></li>
-          <li><a href="/GroceryList">Каталог товаров</a></li>
+          <li><a href="/GroceryListController">Каталог товаров</a></li>
         </ul>
 
       </nav>

@@ -1,10 +1,8 @@
 package Controllers.AccountControllers;
 
-import Interfaces.IRepo;
 import Models.Role;
 import Models.User;
 import Tools.Tool;
-import jdk.nashorn.internal.objects.annotations.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,11 +30,11 @@ public class Login extends HttpServlet{
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        User user = new User().select(req.getParameter("name"),Tool.computeHash(req.getParameter("password")));
+        User user = new User().selectOne(req.getParameter("email"),Tool.computeHash(req.getParameter("password")));
 
 
         if(user!=null){
-            Role role = new Role().select(user.getRoleID());
+            Role role = new Role().selectOne(user.getRoleID());
             HttpSession session = req.getSession(true);
             session.setAttribute("user",user);
             session.setAttribute("role",role);

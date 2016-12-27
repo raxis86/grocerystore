@@ -29,7 +29,7 @@ public class CartRemove extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        Grocery grocery = new Grocery().select(UUID.fromString(req.getParameter("groceryid")));
+        Grocery grocery = new Grocery().selectOne(UUID.fromString(req.getParameter("groceryid")));
 
         if(grocery!=null){
             HttpSession session = req.getSession();

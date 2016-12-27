@@ -43,6 +43,14 @@ public class Cart {
         return priceSum;
     }
 
+    public int totalQuantity(){
+        int totalQuantity=0;
+        for(HashMap.Entry entry: map.entrySet()){
+            totalQuantity+=(int)entry.getValue();
+        }
+        return totalQuantity;
+    }
+
     public void clear(){
         map.clear();
     }

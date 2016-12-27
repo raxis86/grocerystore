@@ -1,6 +1,7 @@
 package Models;
 
 import Interfaces.IRepo;
+import Interfaces.IRepoGrocery;
 import Tools.Tool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +20,7 @@ import static Constants.Constants.*;
 /**
  * Created by raxis on 23.12.2016.
  */
-public class Grocery implements IRepo<Grocery> {
+public class Grocery implements IRepoGrocery<Grocery> {
     private static final Logger logger = LoggerFactory.getLogger(Grocery.class);
 
     private UUID id;
@@ -93,13 +94,14 @@ public class Grocery implements IRepo<Grocery> {
             }
 
         } catch (SQLException e) {
+            logger.error("Cant select List of Grocery",e);
             e.printStackTrace();
         }
         return groceryList;
     }
 
     @Override
-    public Grocery select(UUID id) {
+    public Grocery selectOne(UUID id) {
         Grocery grocery = null;
         try(PreparedStatement statement = Tool.getConnection().prepareStatement(GROCERY_PREP_SELECTONE_QUERY)) {
             statement.setObject(1,id.toString());
@@ -114,7 +116,7 @@ public class Grocery implements IRepo<Grocery> {
                 grocery.setPrice(resultSet.getBigDecimal("PRICE"));
             }
         } catch (SQLException e) {
-            logger.error("Cant select Grocery!", e);
+            logger.error("Cant selectOne Grocery!", e);
             e.printStackTrace();
         }
         return grocery;

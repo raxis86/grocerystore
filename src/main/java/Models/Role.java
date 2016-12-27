@@ -1,6 +1,7 @@
 package Models;
 
 import Interfaces.IRepo;
+import Interfaces.IRepoRole;
 import Tools.Tool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +19,7 @@ import static Constants.Constants.*;
 /**
  * Created by raxis on 25.12.2016.
  */
-public class Role implements IRepo<Role> {
+public class Role implements IRepoRole<Role> {
     private static final Logger logger = LoggerFactory.getLogger(Role.class);
 
     private UUID id;
@@ -59,7 +60,7 @@ public class Role implements IRepo<Role> {
     }
 
     @Override
-    public Role select(UUID id) {
+    public Role selectOne(UUID id) {
         Role role = null;
         try(PreparedStatement statement = Tool.getConnection().prepareStatement(ROLE_PREP_SELECTONE_QUERY)) {
             statement.setObject(1,id.toString());
@@ -71,7 +72,7 @@ public class Role implements IRepo<Role> {
 
             }
         } catch (SQLException e) {
-            logger.error("Cant select Grocery!", e);
+            logger.error("Cant selectOne Grocery!", e);
             e.printStackTrace();
         }
         return role;

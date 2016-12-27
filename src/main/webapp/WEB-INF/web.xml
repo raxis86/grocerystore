@@ -5,12 +5,12 @@
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          id="WebApp_ID" version="2.5">
 <servlet>
-    <servlet-name>GroceryList</servlet-name>
-    <servlet-class>Controllers.GroceryControllers.GroceryList</servlet-class>
+    <servlet-name>GroceryListController</servlet-name>
+    <servlet-class>Controllers.GroceryControllers.GroceryListController</servlet-class>
 </servlet>
 <servlet-mapping>
-    <servlet-name>GroceryList</servlet-name>
-    <url-pattern>/GroceryList</url-pattern>
+    <servlet-name>GroceryListController</servlet-name>
+    <url-pattern>/GroceryListController</url-pattern>
 </servlet-mapping>
     <servlet>
         <servlet-name>Login</servlet-name>
@@ -60,6 +60,22 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
         <servlet-name>CartRemove</servlet-name>
         <url-pattern>/CartRemove</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>OrderAdd</servlet-name>
+        <servlet-class>Controllers.OrderControllers.OrderAdd</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OrderAdd</servlet-name>
+        <url-pattern>/OrderAdd</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>OrderList</servlet-name>
+        <servlet-class>Controllers.OrderControllers.OrderList</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OrderList</servlet-name>
+        <url-pattern>/OrderList</url-pattern>
+    </servlet-mapping>
 
 
 
@@ -85,6 +101,8 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
         <url-pattern>/CartAdd</url-pattern>
         <url-pattern>/CartList</url-pattern>
         <url-pattern>/CartRemove</url-pattern>
+        <url-pattern>/OrderAdd</url-pattern>
+        <url-pattern>/OrderList</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>AdminFilter</filter-name>

@@ -20,6 +20,7 @@ import static Constants.Constants.*;
 /**
  * Created by raxis on 26.12.2016.
  */
+@Deprecated
 public class Order implements IRepoOrder<Order> {
     private static final Logger logger = LoggerFactory.getLogger(Order.class);
 
@@ -125,7 +126,7 @@ public class Order implements IRepoOrder<Order> {
                 fillOrder(order,resultSet);
             }
         } catch (SQLException e) {
-            logger.error("Cant selectOne Order!", e);
+            logger.error("Cant getOne Order!", e);
             e.printStackTrace();
         }
         return order;

@@ -4,7 +4,8 @@ import Models.Grocery;
 import Models.GroceryList;
 import Models.Order;
 import Models.User;
-import Services.Cart;
+import Services.*;
+import Services.Exceptions.NoSavedInDbException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,15 +31,18 @@ public class OrderAdd extends HttpServlet{
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        HttpSession session=req.getSession();
+        /*HttpSession session=req.getSession();
 
         Cart cart = (Cart) session.getAttribute("cart");
-        User user = (User) session.getAttribute("user");
+        User user = (User) session.getAttribute("user");*/
 
-        if((cart!=null)&&(user!=null)){
-            req.setAttribute("user",user);
-            req.setAttribute("cart",cart);
-            req.setAttribute("totalprice",cart.computeTotalPrice().toString());
+        CartService cartService = new CartService();
+        UserService userService = new UserService();
+
+        if((cartService.cartFromSession(req)!=null)&&(userService.userFromSession(req)!=null)){
+            req.setAttribute("user",userService.userFromSession(req));
+            req.setAttribute("cart",cartService.cartFromSession(req));
+            req.setAttribute("totalprice",cartService.cartFromSession(req).computeTotalPrice().toString());
             RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/orderadd.jsp");
             rd.forward(req,resp);
         }
@@ -52,19 +56,25 @@ public class OrderAdd extends HttpServlet{
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        HttpSession session=req.getSession();
+        /*HttpSession session=req.getSession();
         Cart cart = (Cart) session.getAttribute("cart");
-        User user = (User) session.getAttribute("user");
+        User user = (User) session.getAttribute("user");*/
 
-        if((cart!=null)&&(user!=null)){
-            user.setName(req.getParameter("name"));
+        CartService cartService = new CartService();
+        UserService userService = new UserService();
+        OrderService orderService = new OrderService();
+        GroceryListService groceryListService = new GroceryListService();
+
+        if((cartService.cartFromSession(req)!=null)&&(userService.userFromSession(req)!=null)){
+
+            /*user.setName(req.getParameter("name"));
             user.setLastName(req.getParameter("lastname"));
             user.setSurName(req.getParameter("surname"));
             user.setAddress(req.getParameter("address"));
             user.setPhone(req.getParameter("phone"));
-            user.update();
+            user.update();*/
 
-            UUID uuid = UUID.randomUUID();
+            /*UUID uuid = UUID.randomUUID();
 
             Order order = new Order();
             order.setId(UUID.randomUUID());
@@ -74,18 +84,36 @@ public class OrderAdd extends HttpServlet{
             order.setDatetime(new Date());
             order.setGrocerylistid(uuid);
             order.setAddress(user.getAddress());
-            order.insert();
+            order.insert();*/
 
-            for(Map.Entry entry : cart.getMap().entrySet()){
+            try {
+                userService.updateUser(userService.userFromSession(req),
+                        req.getParameter("name"),
+                        req.getParameter("lastname"),
+                        req.getParameter("surname"),
+                        req.getParameter("address"),
+                        req.getParameter("phone"));
+
+                groceryListService.createGroceryList(cartService.cartFromSession(req),
+                        orderService.createOrder(userService.userFromSession(req),cartService.cartFromSession(req)));
+
+                RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/ordersuccess.jsp");
+                rd.forward(req,resp);
+            } catch (NoSavedInDbException e) {
+                RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/savetodberror.jsp");
+                rd.forward(req,resp);
+            }
+
+            /*for(Map.Entry entry : cart.getMap().entrySet()){
                 GroceryList groceryList = new GroceryList();
                 groceryList.setId(uuid);
                 groceryList.setGroceryId(((Grocery)entry.getKey()).getId());
                 groceryList.setQuantity((int)entry.getValue());
                 groceryList.insert();
-            }
+            }*/
 
-            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/ordersuccess.jsp");
-            rd.forward(req,resp);
+            /*RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/ordersuccess.jsp");
+            rd.forward(req,resp);*/
         }
     }
 }

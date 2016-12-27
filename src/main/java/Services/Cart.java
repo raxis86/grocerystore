@@ -1,6 +1,6 @@
 package Services;
 
-import Models.Grocery;
+import DAO.Entities.Grocery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -18,6 +18,7 @@ import static Constants.Constants.*;
 /**
  * Created by raxis on 26.12.2016.
  */
+@Deprecated
 public class GroceryList implements IRepoGroceryList<GroceryList> {
     private static final Logger logger = LoggerFactory.getLogger(GroceryList.class);
 
@@ -83,7 +84,7 @@ public class GroceryList implements IRepoGroceryList<GroceryList> {
                 fillGroceryList(groceryList,resultSet);
             }
         } catch (SQLException e) {
-            logger.error("Cant selectOne Grocery!", e);
+            logger.error("Cant getOne Grocery!", e);
             e.printStackTrace();
         }
         return groceryList;

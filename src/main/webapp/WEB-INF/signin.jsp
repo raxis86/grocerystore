@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: raxis
@@ -11,10 +12,19 @@
     <title>Регистрация</title>
 </head>
 <body>
-    <form action="Login" method="post">
-        Email:<input type="text" name="email"><br>
-        Password:<input type="password" name="password"><br>
-        <input type="submit" value="Войти">
+    <c:forEach items="${messages}" var="item">
+        <div>${item}</div><br>
+    </c:forEach>
+    <H2>${message}</H2>
+    <form action="/Signin" method="post">
+        Email:<input type="text" name="email" value=""><br>
+        Password:<input type="password" name="password" value=""><br>
+        Имя:<input type="text" name="name" value="${name}"><br>
+        Фамилия:<input type="text" name="lastname" value="${lastname}"><br>
+        Отчество:<input type="text" name="surname" value="${surname}"><br>
+        Адрес:<input type="textarea" name="address" value="${address}"><br>
+        Телефон:<input type="text" name="phone" value="${phone}"><br>
+        <input type="submit" value="Зарегистрироваться">
     </form>
 </body>
 </html>

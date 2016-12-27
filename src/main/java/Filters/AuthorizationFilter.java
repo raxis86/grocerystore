@@ -1,7 +1,6 @@
 package Filters;
 
-import Models.Role;
-import Models.User;
+import DAO.Entities.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +27,7 @@ public class AuthorizationFilter implements Filter{
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpSession session = ((HttpServletRequest)request).getSession(false);
         User currentUser = null;
+
         if(session!=null){
             currentUser = (User)session.getAttribute("user");
         }

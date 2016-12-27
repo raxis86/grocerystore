@@ -21,6 +21,14 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
         <url-pattern>/Login</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>Signin</servlet-name>
+        <servlet-class>Controllers.AccountControllers.Signin</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Signin</servlet-name>
+        <url-pattern>/Signin</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>GroceryListAdmin</servlet-name>
         <servlet-class>Controllers.GroceryControllers.GroceryListAdmin</servlet-class>
     </servlet>
@@ -76,6 +84,14 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
         <servlet-name>OrderList</servlet-name>
         <url-pattern>/OrderList</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>GroceryAdd</servlet-name>
+        <servlet-class>Controllers.GroceryControllers.GroceryAdd</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GroceryAdd</servlet-name>
+        <url-pattern>/GroceryAdd</url-pattern>
+    </servlet-mapping>
 
 
 
@@ -98,6 +114,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     <filter-mapping>
         <filter-name>AuthorizationFilter</filter-name>
         <url-pattern>/GroceryListAdmin</url-pattern>
+        <url-pattern>/GroceryAdd</url-pattern>
         <url-pattern>/CartAdd</url-pattern>
         <url-pattern>/CartList</url-pattern>
         <url-pattern>/CartRemove</url-pattern>
@@ -107,6 +124,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     <filter-mapping>
         <filter-name>AdminFilter</filter-name>
         <url-pattern>/GroceryListAdmin</url-pattern>
+        <url-pattern>/GroceryAdd</url-pattern>
     </filter-mapping>
   <!--  <filter>
         <filter-name>AuthorizationFilter</filter-name>

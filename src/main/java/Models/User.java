@@ -20,6 +20,7 @@ import static Constants.Constants.*;
 /**
  * Created by raxis on 24.12.2016.
  */
+@Deprecated
 public class User implements IRepoUser<User> {
     private static final Logger logger = LoggerFactory.getLogger(User.class);
 
@@ -128,7 +129,7 @@ public class User implements IRepoUser<User> {
                 fillUser(usr,resultSet);
             }
         } catch (SQLException e) {
-            logger.error("Cant selectOne User by auth info",e);
+            logger.error("Cant getOne User by auth info",e);
             e.printStackTrace();
         }
         return usr;
@@ -163,7 +164,7 @@ public class User implements IRepoUser<User> {
                 fillUser(usr,resultSet);
             }
         } catch (SQLException e) {
-            logger.error("Cant selectOne User!",e);
+            logger.error("Cant getOne User!",e);
             e.printStackTrace();
         }
         return usr;

@@ -11,7 +11,7 @@
     <title>Авторизация</title>
 </head>
 <body>
-    <form action="Login" method="post">
+    <form action="/Login" method="post">
         Email:<input type="text" name="email"><br>
         Password:<input type="password" name="password"><br>
         <input type="submit" value="Войти">

@@ -1,7 +1,6 @@
 package Filters;
 
-import Models.Role;
-import Models.User;
+import DAO.Entities.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,6 +1,7 @@
 package Controllers.CartController;
 
 import Services.Cart;
+import Services.CartService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,13 +28,15 @@ public class CartList extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        HttpSession session=req.getSession();
+        CartService cartService = new CartService();
 
-        Cart cart = (Cart) session.getAttribute("cart");
+        /*HttpSession session=req.getSession();
 
-        if(cart!=null){
-            req.setAttribute("cart",cart);
-            req.setAttribute("totalprice",cart.computeTotalPrice().toString());
+        Cart cart = (Cart) session.getAttribute("cart");*/
+
+        if(cartService.cartFromSession(req)!=null){
+            req.setAttribute("cart",cartService.cartFromSession(req));
+            req.setAttribute("totalprice",cartService.cartFromSession(req).computeTotalPrice().toString());
             RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/cart.jsp");
             rd.forward(req,resp);
         }

@@ -19,7 +19,7 @@
     <c:if test="${empty sessionScope.user}" >
     <div>Привет, анон!</div>
     <div> <a href="/Login">Вход</a> </div>
-    <div> <a href="">Регистрация</a> </div>
+    <div> <a href="/Signin">Регистрация</a> </div>
     </c:if>
     <c:if test="${!empty sessionScope.user}" >
     <div>Здравствуйте, ${sessionScope.user.getName()}!</div>

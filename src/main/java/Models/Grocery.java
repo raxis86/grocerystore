@@ -20,6 +20,7 @@ import static Constants.Constants.*;
 /**
  * Created by raxis on 23.12.2016.
  */
+@Deprecated
 public class Grocery implements IRepoGrocery<Grocery> {
     private static final Logger logger = LoggerFactory.getLogger(Grocery.class);
 
@@ -116,7 +117,7 @@ public class Grocery implements IRepoGrocery<Grocery> {
                 grocery.setPrice(resultSet.getBigDecimal("PRICE"));
             }
         } catch (SQLException e) {
-            logger.error("Cant selectOne Grocery!", e);
+            logger.error("Cant getOne Grocery!", e);
             e.printStackTrace();
         }
         return grocery;

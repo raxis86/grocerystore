@@ -6,6 +6,7 @@ import java.util.UUID;
 /**
  * Created by raxis on 23.12.2016.
  */
+@Deprecated
 public interface IRepo<T> {
     public List<T> select();
     public T selectOne(UUID id);

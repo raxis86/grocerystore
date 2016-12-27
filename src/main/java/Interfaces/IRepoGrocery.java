@@ -6,6 +6,7 @@ import java.util.UUID;
 /**
  * Created by raxis on 26.12.2016.
  */
+@Deprecated
 public interface IRepoGrocery<T> extends IRepo<T> {
     public UUID getId();
     public void setId(UUID id);

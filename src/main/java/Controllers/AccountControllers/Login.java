@@ -1,7 +1,9 @@
 package Controllers.AccountControllers;
 
+import Interfaces.IRepoUser;
 import Models.Role;
 import Models.User;
+import Services.AccountService;
 import Tools.Tool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,11 +32,15 @@ public class Login extends HttpServlet{
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        User user = new User().selectOne(req.getParameter("email"),Tool.computeHash(req.getParameter("password")));
+        AccountService accountService = new AccountService();
+
+        accountService.userLogin(req.getParameter("email"),req.getParameter("password"),req);
+
+        /*IRepoUser user = new User().getOne(req.getParameter("email"),Tool.computeHash(req.getParameter("password")));
 
 
         if(user!=null){
-            Role role = new Role().selectOne(user.getRoleID());
+            Role role = new Role().getOne(user.getRoleID());
             HttpSession session = req.getSession(true);
             session.setAttribute("user",user);
             session.setAttribute("role",role);
@@ -43,7 +49,7 @@ public class Login extends HttpServlet{
             str=req.getContextPath();
             str=req.getPathTranslated();
             str=req.getServletPath();
-        }
+        }*/
         RequestDispatcher rd=req.getRequestDispatcher("/index.jsp");
         rd.forward(req,resp);
     }

@@ -2,7 +2,10 @@ package Controllers.OrderControllers;
 
 import Interfaces.*;
 import Models.*;
-import ViewModels.OrderView;
+import Services.Exceptions.NoSavedInDbException;
+import Services.OrderService;
+import Services.UserService;
+import Services.ViewModels.OrderView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +14,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.*;
 
@@ -25,11 +27,13 @@ public class OrderList extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        HttpSession session=req.getSession();
-        IRepoUser user = (User) session.getAttribute("user");
+        UserService userService = new UserService();
+        OrderService orderService = new OrderService();
+        /*HttpSession session=req.getSession();
+        IRepoUser user = (User) session.getAttribute("user");*/
 
-        if(user!=null){
-            List<OrderView> orderViewList = new ArrayList<>();
+        if(userService.userFromSession(req)!=null){
+            /*List<OrderView> orderViewList = new ArrayList<>();
 
             IRepoOrder order = new Order();
             List<IRepoOrder> orderList=order.selectByUserId(user.getId());
@@ -54,9 +58,10 @@ public class OrderList extends HttpServlet {
                 orderView.setGroceries(map);
 
                 orderViewList.add(orderView);
-            }
+            }*/
 
-            req.setAttribute("orderlist",orderViewList);
+
+            req.setAttribute("orderlist",orderService.formOrderViewList(userService.userFromSession(req)));
 
             RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/orderlist.jsp");
             rd.forward(req,resp);
@@ -73,11 +78,22 @@ public class OrderList extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        IRepoOrder order = new Order().selectOne(UUID.fromString(req.getParameter("orderid")));
+        OrderService orderService = new OrderService();
+
+        try {
+            orderService.updateOrder(req.getParameter("orderid"));
+            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/grocerylist.jsp");
+            rd.forward(req,resp);
+        } catch (NoSavedInDbException e) {
+            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/savetodberror.jsp");
+            rd.forward(req,resp);
+        }
+
+        /*IRepoOrder order = new Order().selectOne(UUID.fromString(req.getParameter("orderid")));
 
         order.setOrderstatusid(UUID.fromString("1c8d12cf-6b0a-4168-ae2a-cb416cf30da5"));
 
-        order.update();
+        order.update();*/
 
         RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/grocerylist.jsp");
         rd.forward(req,resp);

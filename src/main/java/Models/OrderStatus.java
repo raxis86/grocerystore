@@ -18,6 +18,7 @@ import static Constants.Constants.*;
 /**
  * Created by raxis on 26.12.2016.
  */
+@Deprecated
 public class OrderStatus implements IRepoOrderStatus<OrderStatus> {
     private static final Logger logger = LoggerFactory.getLogger(OrderStatus.class);
 
@@ -72,7 +73,7 @@ public class OrderStatus implements IRepoOrderStatus<OrderStatus> {
                 orderStatus.setStatus(resultSet.getString("STATUS"));
             }
         } catch (SQLException e) {
-            logger.error("Cant selectOne OrderStatus!", e);
+            logger.error("Cant getOne OrderStatusSql!", e);
             e.printStackTrace();
         }
         return orderStatus;

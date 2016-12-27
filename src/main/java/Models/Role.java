@@ -19,6 +19,7 @@ import static Constants.Constants.*;
 /**
  * Created by raxis on 25.12.2016.
  */
+@Deprecated
 public class Role implements IRepoRole<Role> {
     private static final Logger logger = LoggerFactory.getLogger(Role.class);
 
@@ -72,7 +73,7 @@ public class Role implements IRepoRole<Role> {
 
             }
         } catch (SQLException e) {
-            logger.error("Cant selectOne Grocery!", e);
+            logger.error("Cant getOne Grocery!", e);
             e.printStackTrace();
         }
         return role;

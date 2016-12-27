@@ -99,7 +99,7 @@ public class Tool {
 
     public static void main(String[] args) {
        /* Grocery grocery = new Grocery();
-        List<Grocery> groceryList = grocery.selectOne();
+        List<Grocery> groceryList = grocery.getOne();
 
         for(Grocery g:groceryList){
             System.out.println(g.getId()+" " + g.getParentid() + " " + g.isIscategory() + " " + g.getName() + " " + g.getQuantity() + " " + g.getPrice());
@@ -127,7 +127,7 @@ public class Tool {
         user.setPassword(computeHash("1qaz2wsx"));
         user.insert();*/
 
-        //User user = new User().selectOne(UUID.fromString("51f9d052-323e-49c1-a88e-208530f88d5d"));
+        //User user = new User().getOne(UUID.fromString("51f9d052-323e-49c1-a88e-208530f88d5d"));
 
         //System.out.println(user.getPassword());
         //user.setPassword(computeHash("yamaha"));

@@ -20,6 +20,13 @@ import java.util.UUID;
 public class CartAdd extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(CartAdd.class);
 
+    /**
+     * В этом запросе товар добавляется в корзину покупок
+     * @param req
+     * @param resp
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");

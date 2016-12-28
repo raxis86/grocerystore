@@ -12,6 +12,7 @@ import java.util.UUID;
 
 /**
  * Created by raxis on 27.12.2016.
+ * Класс для работы с корзиной покупок
  */
 public class CartService {
     private static final Logger logger = LoggerFactory.getLogger(CartService.class);
@@ -22,6 +23,11 @@ public class CartService {
         this.groceryHandler=new GrocerySql();
     }
 
+    /**
+     * Добавление продукта в корзину
+     * @param groceryid
+     * @param req
+     */
     public void addToCart(String groceryid, HttpServletRequest req){
         Grocery grocery = (Grocery) groceryHandler.getOne(UUID.fromString(groceryid));
 

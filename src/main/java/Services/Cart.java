@@ -9,16 +9,25 @@ import java.util.*;
 
 /**
  * Created by raxis on 25.12.2016.
+ * Корзина покупок
  */
 public class Cart {
     private static final Logger logger = LoggerFactory.getLogger(Cart.class);
 
+    /**
+     * Хэш-мап для огранизации хранения товаров
+     */
     private Map<Grocery,Integer> map = new HashMap<>();
 
     public Map<Grocery, Integer> getMap() {
         return map;
     }
 
+    /**
+     * Добавление товара
+     * @param grocery - продукт
+     * @param quantity - количество
+     */
     public void addItem(Grocery grocery, Integer quantity){
         Integer sum=map.put(grocery,quantity);
         if(sum!=null){
@@ -30,6 +39,10 @@ public class Cart {
         map.remove(grocery);
     }
 
+    /**
+     * Подсчет общей суммы корзины
+     * @return
+     */
     public BigDecimal computeTotalPrice(){
         BigDecimal priceSum = BigDecimal.valueOf(0);
         BigDecimal price=BigDecimal.valueOf(0);
@@ -43,6 +56,10 @@ public class Cart {
         return priceSum;
     }
 
+    /**
+     * Подсчет общего количества продуктов в корзине
+     * @return
+     */
     public int totalQuantity(){
         int totalQuantity=0;
         for(HashMap.Entry entry: map.entrySet()){

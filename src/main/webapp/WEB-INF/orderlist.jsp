@@ -14,20 +14,40 @@
     <title>Список заказов</title>
   </head>
   <body>
-    <%--<div> <a href="">Вход</a> </div>
-    <div> <a href="">Регистрация</a> </div>--%>
-    <div>
-      <nav>
-        <ul id="menu">
-          <li><a href="/index.jsp">Главная</a></li>
-          <li><a href="GroceryListController">Каталог товаров</a></li>
-        </ul>
 
+  <div class="menu">
+      <c:if test="${empty sessionScope.user}" >
+          <div> <a href="/Login">Вход</a> </div>
+          <div> <a href="/Signin">Регистрация</a> </div>
+      </c:if>
+      <c:if test="${!empty sessionScope.user}" >
+          <div> ${sessionScope.user.getName()}!</div>
+          <div> <a href="/Logout">Выход</a> </div>
+      </c:if>
+  </div>
+
+  <div>
+      <nav>
+          <ul id="menu">
+              <li><a href="index.jsp">Главная</a></li>
+              <c:if test="${empty sessionScope.user}" >
+                  <li><a href="/GroceryListController">Каталог товаров</a></li>
+              </c:if>
+              <c:if test="${!empty sessionScope.user}" >
+                  <c:if test="${!sessionScope.role.getName().equals('admin')}" >
+                      <li><a href="/GroceryListController">Каталог товаров</a></li>
+                      <li><a href="/CartList">Корзина покупок</a></li>
+                      <li><a href="/OrderList">Список заказов</a></li>
+                  </c:if>
+                  <c:if test="${sessionScope.role.getName().equals('admin')}" >
+                      <li><a href="/OrderListAdmin">Список заказов (админ-режим)</a></li>
+                      <li><a href="/GroceryListAdmin">Каталог товаров (админ-режим)</a></li>
+                  </c:if>
+              </c:if>
+          </ul>
       </nav>
-    </div>
-<%--    <c:if test="${!empty sessionScope.user}" >
-      <div> <a href="/CartList">Корзина покупок</a> </div>
-    </c:if>--%>
+  </div>
+
     <div>Ваши заказы:</div>
     <c:forEach items="${orderlist}" var="item">
     <Table>
@@ -66,32 +86,5 @@
     </c:forEach>
 
 
-    <%--<br>
-    <div>Итого:${totalprice}</div>
-    <br>
-    <div>Ваши данные:</div>
-    <form action="/OrderAdd" method="post">
-      <input type="hidden" name="userid" value="${user.getId()}">
-      Имя: <input type="text" name="name" value="${user.getName()}"> <br>
-      Фамилия: <input type="text" name="lastname" value="${user.getLastName()}"> <br>
-      Отчество: <input type="text" name="surname" value="${user.getSurName()}"> <br>
-      Телефон: <input type="text" name="phone" value="${user.getPhone()}"> <br>
-      Адрес доставки: <input type="textarea" name="address" value="${user.getAddress()}"> <br>
-      &lt;%&ndash;<input type="hidden" name="returnurl" value="${req.requestURI}">&ndash;%&gt;
-      <input type="submit" value="Оформить">
-    </form>--%>
-
-
-      <%--<c:forEach items="${groceryList}" var="item">
-        ${item}<br>
-      </c:forEach>--%>
-
-   <%-- <c:forEach items="${groceryList}" var="item">
-      ${item.getPrice()}<br>
-    </c:forEach>--%>
-
-  <%--<%for(Grocery g : (List<Grocery>)request.getAttribute("grocerylist")){%>
-    <%=g.getName()%>
-  <%}%>
-  </body>--%>
+  </body>
 </html>

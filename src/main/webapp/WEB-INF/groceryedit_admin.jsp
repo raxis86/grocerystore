@@ -14,7 +14,6 @@
   <title>Каталог товаров</title>
 </head>
 <body>
-
 <div class="menu">
   <c:if test="${empty sessionScope.user}" >
     <div> <a href="/Login">Вход</a> </div>
@@ -48,40 +47,13 @@
   </nav>
 </div>
 
-<br>
+<form action="/GroceryEdit" method="post">
+  <input type="hidden" name="groceryid" value="${grocery.getId()}">
+  Наименование:<div><input type="text" name="name" value="${grocery.getName()}"></div><br>
+  Цена:<div><input type="text" name="price" value="${grocery.getPrice()}"></div><br>
+  Количество:<div><input type="text" name="quantity" value="${grocery.getQuantity()}"></div><br>
+  <input type="submit" value="Сохранить">
+</form>
 
-<div> <a href="/GroceryAdd">Добавить новый продукт</a> </div>
-
-<Table>
-  <tr>
-    <th>Наименование</th>
-    <th>Цена</th>
-    <th>Количество</th>
-    <th></th>
-    <th></th>
-  </tr>
-  <c:forEach items="${groceryList}" var="item">
-    <tr>
-      <td>${item.getName()}</td>
-      <td>${item.getPrice()}</td>
-      <td>${item.getQuantity()}</td>
-      <td><a href="/GroceryEdit?groceryid=${item.getId()}">Редактировать</a></td>
-      <td><a href="/GroceryDel?groceryid=${item.getId()}">Удалить</a></td>
-    </tr>
-    </br>
-  </c:forEach>
-</Table>
-
-<%--<c:forEach items="${groceryList}" var="item">
-  ${item}<br>
-</c:forEach>--%>
-
-<%-- <c:forEach items="${groceryList}" var="item">
-   ${item.getPrice()}<br>
- </c:forEach>--%>
-
-<%--<%for(Grocery g : (List<Grocery>)request.getAttribute("grocerylist")){%>
-  <%=g.getName()%>
-<%}%>
-</body>--%>
+</body>
 </html>

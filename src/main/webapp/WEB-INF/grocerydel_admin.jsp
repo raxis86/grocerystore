@@ -1,5 +1,4 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="Models.Grocery" %>
 <%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: raxis
@@ -14,7 +13,6 @@
   <title>Каталог товаров</title>
 </head>
 <body>
-
 <div class="menu">
   <c:if test="${empty sessionScope.user}" >
     <div> <a href="/Login">Вход</a> </div>
@@ -48,40 +46,16 @@
   </nav>
 </div>
 
-<br>
 
-<div> <a href="/GroceryAdd">Добавить новый продукт</a> </div>
 
-<Table>
-  <tr>
-    <th>Наименование</th>
-    <th>Цена</th>
-    <th>Количество</th>
-    <th></th>
-    <th></th>
-  </tr>
-  <c:forEach items="${groceryList}" var="item">
-    <tr>
-      <td>${item.getName()}</td>
-      <td>${item.getPrice()}</td>
-      <td>${item.getQuantity()}</td>
-      <td><a href="/GroceryEdit?groceryid=${item.getId()}">Редактировать</a></td>
-      <td><a href="/GroceryDel?groceryid=${item.getId()}">Удалить</a></td>
-    </tr>
-    </br>
-  </c:forEach>
-</Table>
+<form action="/GroceryDel" method="post">
+  <input type="hidden" name="groceryid" value="${grocery.getId()}">
+  Наименование:<div>${grocery.getName()}</div><br>
+  Цена:<div>${grocery.getPrice()}</div><br>
+  Количество:<div>${grocery.getQuantity()}</div><br>
+  <input type="submit" value="Удалить">
+</form>
 
-<%--<c:forEach items="${groceryList}" var="item">
-  ${item}<br>
-</c:forEach>--%>
 
-<%-- <c:forEach items="${groceryList}" var="item">
-   ${item.getPrice()}<br>
- </c:forEach>--%>
-
-<%--<%for(Grocery g : (List<Grocery>)request.getAttribute("grocerylist")){%>
-  <%=g.getName()%>
-<%}%>
-</body>--%>
+</body>
 </html>

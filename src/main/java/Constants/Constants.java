@@ -16,8 +16,8 @@ public class Constants {
     public static final String USER_PREP_SELECTONE_QUERY="SELECT * FROM users WHERE ID=?";
     public static final String USER_PREP_SELECTONE_BY_AUTH_QUERY="SELECT * FROM users WHERE EMAIL=? AND PASSWORD=?";
     public static final String USER_PREP_SELECTONE_BY_EMAIL_QUERY="SELECT * FROM users WHERE EMAIL=?";
-    public static final String USER_PREP_INSERT_QUERY="INSERT INTO users values (?,?,?,?,?,?,?,?,?)";
-    public static final String USER_PREP_UPDATE_QUERY="UPDATE users SET ROLEID=?,NAME=?,EMAIL=?,PASSWORD=?,LASTNAME=?,SURNAME=?,ADDRESS=?,PHONE=? WHERE ID=?";
+    public static final String USER_PREP_INSERT_QUERY="INSERT INTO users values (?,?,?,?,?,?,?,?,?,?)";
+    public static final String USER_PREP_UPDATE_QUERY="UPDATE users SET ROLEID=?,NAME=?,EMAIL=?,PASSWORD=?,SALT=?,LASTNAME=?,SURNAME=?,ADDRESS=?,PHONE=? WHERE ID=?";
     public static final String USER_PREP_DELETE_QUERY="DELETE FROM users WHERE ID=?";
     public static final String ROLE_SELECTALL_QUERY="SELECT * FROM roles";
     public static final String ROLE_PREP_SELECTONE_QUERY="SELECT * FROM roles WHERE ID=?";
@@ -26,6 +26,7 @@ public class Constants {
     public static final String ROLE_PREP_DELETE_QUERY="DELETE FROM roles WHERE ID=?";
     public static final String GROCERYLIST_SELECTALL_QUERY="SELECT * FROM grocerylist";
     public static final String GROCERYLIST_PREP_SELECTONE_QUERY="SELECT * FROM grocerylist WHERE ID=?";
+    public static final String GROCERYLIST_PREP_SELECT_BY_GROCERYID_QUERY="SELECT * FROM grocerylist WHERE GROCERYID=?";
     public static final String GROCERYLIST_PREP_INSERT_QUERY="INSERT INTO grocerylist (ID,GROCERYID,QUANTITY) values (?,?,?)";
     public static final String GROCERYLIST_PREP_UPDATE_QUERY="UPDATE grocerylist SET GROCERYID=?,QUANTITY=? WHERE ID=?";
     public static final String GROCERYLIST_PREP_DELETE_QUERY="DELETE FROM grocerylist WHERE ID=?";

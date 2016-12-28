@@ -1,5 +1,4 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="Models.Grocery" %>
 <%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: raxis
@@ -11,9 +10,10 @@
 <c:set var="req" value="${pageContext.request}" />
 <html>
   <head>
-    <title>Оформление заказа</title>
+    <title>Список заказов</title>
   </head>
   <body>
+
   <div class="menu">
       <c:if test="${empty sessionScope.user}" >
           <div> <a href="/Login">Вход</a> </div>
@@ -47,38 +47,45 @@
       </nav>
   </div>
 
-
-    <div>Вы заказываете следующие продукты:</div>
-    <Table>
-      <tr>
-        <th>Наименование</th>
-        <th>Цена</th>
-        <th>Количество</th>
-        <th></th>
-      </tr>
-      <c:forEach items="${cart.getMap()}" var="item">
-        <tr>
-          <td>${item.key.getName()}</td>
-          <td>${item.key.getPrice()}</td>
-          <td>${item.value}</td>
-        </tr>
-        </br>
-      </c:forEach>
-    </Table>
-    <br>
-    <div>Итого:${totalprice}</div>
-    <br>
-    <div>Ваши данные:</div>
-    <form action="/OrderAdd" method="post">
-      <input type="hidden" name="userid" value="${user.getId()}">
-      Имя: <input type="text" name="name" value="${user.getName()}"> <br>
-      Фамилия: <input type="text" name="lastname" value="${user.getLastName()}"> <br>
-      Отчество: <input type="text" name="surname" value="${user.getSurName()}"> <br>
-      Телефон: <input type="text" name="phone" value="${user.getPhone()}"> <br>
-      Адрес доставки: <input type="textarea" name="address" value="${user.getAddress()}"> <br>
-      <%--<input type="hidden" name="returnurl" value="${req.requestURI}">--%>
-      <input type="submit" value="Оформить">
-    </form>
+    <div>Редактируемый заказ:</div>
+    <form action="/OrderEdit" method="post">
+        <input type="hidden" name="orderid" value="${order.getId()}">
+        <Table>
+            <th>Статус</th>
+            <th>Дата</th>
+            <th>Сумма</th>
+            <th>Адрес доставки</th>
+            <th></th>
+            <tr>
+                <td>${order.getStatus()}</td>
+                <td>${order.getDate()}</td>
+                <td>${order.getPrice()}</td>
+                <td>${order.getAddress()}</td>
+                <td>
+                    <p><select size="order.getStatuses().size()" name="statusid">
+                        <c:forEach items="${order.getStatuses()}" var="status">
+                            <option name="statusid" value="${status.key}">${status.value}</option>
+                        </c:forEach>
+                    </select></p>
+                </td>
+            </tr>
+            <tr>
+                <table>
+                    <th>Наименование</th>
+                    <th>Количество</th>
+                    <c:forEach items="${order.getGroceries()}" var="map">
+                        <tr>
+                            <td>${map.key}</td>
+                            <td>${map.value}</td>
+                        </tr>
+                        </br>
+                    </c:forEach>
+                </table>
+            </tr>
+        </Table>
+        <br>
+        <input type="submit" value="Сохранить">
+    </form >
 
   </body>
 </html>

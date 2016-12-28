@@ -56,36 +56,12 @@ public class OrderAdd extends HttpServlet{
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        /*HttpSession session=req.getSession();
-        Cart cart = (Cart) session.getAttribute("cart");
-        User user = (User) session.getAttribute("user");*/
-
         CartService cartService = new CartService();
         UserService userService = new UserService();
         OrderService orderService = new OrderService();
         GroceryListService groceryListService = new GroceryListService();
 
         if((cartService.cartFromSession(req)!=null)&&(userService.userFromSession(req)!=null)){
-
-            /*user.setName(req.getParameter("name"));
-            user.setLastName(req.getParameter("lastname"));
-            user.setSurName(req.getParameter("surname"));
-            user.setAddress(req.getParameter("address"));
-            user.setPhone(req.getParameter("phone"));
-            user.update();*/
-
-            /*UUID uuid = UUID.randomUUID();
-
-            Order order = new Order();
-            order.setId(UUID.randomUUID());
-            order.setUserid(user.getId());
-            order.setOrderstatusid(UUID.fromString("c24be575-187f-4d41-82ee-ff874764b829"));
-            order.setPrice(cart.computeTotalPrice());
-            order.setDatetime(new Date());
-            order.setGrocerylistid(uuid);
-            order.setAddress(user.getAddress());
-            order.insert();*/
-
             try {
                 userService.updateUser(userService.userFromSession(req),
                         req.getParameter("name"),
@@ -97,23 +73,14 @@ public class OrderAdd extends HttpServlet{
                 groceryListService.createGroceryList(cartService.cartFromSession(req),
                         orderService.createOrder(userService.userFromSession(req),cartService.cartFromSession(req)));
 
+                cartService.clearCart(req);
+
                 RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/ordersuccess.jsp");
                 rd.forward(req,resp);
             } catch (NoSavedInDbException e) {
                 RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/savetodberror.jsp");
                 rd.forward(req,resp);
             }
-
-            /*for(Map.Entry entry : cart.getMap().entrySet()){
-                GroceryList groceryList = new GroceryList();
-                groceryList.setId(uuid);
-                groceryList.setGroceryId(((Grocery)entry.getKey()).getId());
-                groceryList.setQuantity((int)entry.getValue());
-                groceryList.insert();
-            }*/
-
-            /*RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/ordersuccess.jsp");
-            rd.forward(req,resp);*/
         }
     }
 }

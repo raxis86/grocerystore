@@ -16,6 +16,7 @@ public class User {
     private String name;
     private String email;
     private String password;
+    private String salt;
     private String lastName;
     private String surName;
     private String address;
@@ -59,6 +60,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     public String getLastName() {

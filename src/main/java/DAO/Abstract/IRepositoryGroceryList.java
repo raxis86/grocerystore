@@ -7,4 +7,5 @@ import java.util.List;
  */
 public interface IRepositoryGroceryList<T,K> extends IRepository<T,K> {
     public List<T> getListById(K id);
+    public List<T> getListByGroceryId(K id);
 }

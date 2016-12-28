@@ -18,6 +18,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -97,7 +98,22 @@ public class Tool {
         return str;
     }
 
+    public static String generateSalt(){
+        String salt="";
+        Random random = new Random();
+        int length = random.nextInt(17)+10;
+        for(int i=0; i<length; i++){
+            salt+=(char)(random.nextInt(93)+33);
+        }
+        return salt;
+    }
+
     public static void main(String[] args) {
+        /*String salt = Tool.generateSalt();
+        String pwd = Tool.computeHash(Tool.computeHash("1qaz2wsx") + salt);
+        System.out.println(salt);
+        System.out.println(pwd);*/
+        //System.out.println(generateSalt());
        /* Grocery grocery = new Grocery();
         List<Grocery> groceryList = grocery.getOne();
 

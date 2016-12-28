@@ -4,6 +4,7 @@ import Interfaces.IRepoUser;
 import Models.Role;
 import Models.User;
 import Services.AccountService;
+import Services.Message;
 import Tools.Tool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +35,15 @@ public class Login extends HttpServlet{
 
         AccountService accountService = new AccountService();
 
-        accountService.userLogin(req.getParameter("email"),req.getParameter("password"),req);
+        Message message = accountService.userLogin(req.getParameter("email"),req.getParameter("password"),req);
+        if(message.isOk()){
+            RequestDispatcher rd=req.getRequestDispatcher("/index.jsp");
+            rd.forward(req,resp);
+        }
+        else {
+            req.setAttribute("messages",message.getMessagesError());
+            doGet(req,resp);
+        }
 
         /*IRepoUser user = new User().getOne(req.getParameter("email"),Tool.computeHash(req.getParameter("password")));
 
@@ -50,7 +59,5 @@ public class Login extends HttpServlet{
             str=req.getPathTranslated();
             str=req.getServletPath();
         }*/
-        RequestDispatcher rd=req.getRequestDispatcher("/index.jsp");
-        rd.forward(req,resp);
     }
 }

@@ -21,20 +21,29 @@ import java.util.UUID;
 public class AccountService {
     private static final Logger logger = LoggerFactory.getLogger(AccountService.class);
 
-    public boolean userLogin(String email, String password, HttpServletRequest req){
+    public Message userLogin(String email, String password, HttpServletRequest req){
         IRepositoryUser userHandler = new UserSql();
         IRepositoryRole roleHandler = new RoleSql();
 
-        User user = (User) userHandler.getOne(email,Tool.computeHash(password));
+        //Ищем, что существует юзер с таким email
+        User userByEmail = (User) userHandler.getOneByEmail(email.toLowerCase());
+
+        if(userByEmail==null){
+            return new Message("Пользователь с таким email не найден!", Message.Status.ERROR);
+        }
+
+        User user = (User) userHandler.getOne(email.toLowerCase(),Tool.computeHash(Tool.computeHash(password) + userByEmail.getSalt()));
+
+        //User user = (User) userHandler.getOne(email,Tool.computeHash(password));
 
         if(user!=null){
             Role role = (Role) roleHandler.getOne(user.getRoleID());
             HttpSession session = req.getSession(true);
             session.setAttribute("user",user);
             session.setAttribute("role",role);
-            return true;
+            return new Message("Ok", Message.Status.OK);
         }
-        else {return false;}
+        else {return new Message("Неверный пароль", Message.Status.ERROR);}
     }
 
     public void userLogout(HttpServletRequest req){
@@ -54,8 +63,9 @@ public class AccountService {
 
                 user.setId(UUID.randomUUID());
                 user.setRoleID(UUID.fromString("81446dc5-bd04-4d41-bd72-7405effb4716"));
-                user.setEmail(email);
-                user.setPassword(Tool.computeHash(password));
+                user.setEmail(email.toLowerCase());
+                user.setSalt(Tool.generateSalt());
+                user.setPassword(Tool.computeHash(Tool.computeHash(password) + user.getSalt()));
                 user.setName(name);
                 user.setLastName(lastname);
                 user.setSurName(surname);

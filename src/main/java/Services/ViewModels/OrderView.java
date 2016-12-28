@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by raxis on 26.12.2016.
@@ -18,6 +19,7 @@ public class OrderView {
     private String status;
     private String price;
     private Map<String,Integer> groceries;
+    private Map<String,String> statuses;
 
     public String getId() {
         return id;
@@ -73,5 +75,13 @@ public class OrderView {
 
     public void setGroceries(Map<String, Integer> groceries) {
         this.groceries = groceries;
+    }
+
+    public Map<String, String> getStatuses() {
+        return statuses;
+    }
+
+    public void setStatuses(Map<String, String> statuses) {
+        this.statuses = statuses;
     }
 }

@@ -29,6 +29,7 @@ public class UserSql implements IRepositoryUser<User,UUID> {
         usr.setName(resultSet.getString("NAME"));
         usr.setEmail(resultSet.getString("EMAIL"));
         usr.setPassword(resultSet.getString("PASSWORD"));
+        usr.setSalt(resultSet.getString("SALT"));
         usr.setLastName(resultSet.getString("LASTNAME"));
         usr.setSurName(resultSet.getString("SURNAME"));
         usr.setAddress(resultSet.getString("ADDRESS"));
@@ -78,10 +79,11 @@ public class UserSql implements IRepositoryUser<User,UUID> {
             statement.setObject(3,entity.getName());
             statement.setObject(4,entity.getEmail());
             statement.setObject(5,entity.getPassword());
-            statement.setObject(6,entity.getLastName());
-            statement.setObject(7,entity.getSurName());
-            statement.setObject(8,entity.getAddress());
-            statement.setObject(9,entity.getPhone());
+            statement.setObject(6,entity.getSalt());
+            statement.setObject(7,entity.getLastName());
+            statement.setObject(8,entity.getSurName());
+            statement.setObject(9,entity.getAddress());
+            statement.setObject(10,entity.getPhone());
             statement.execute();
         } catch (SQLException e) {
             logger.error("Insert user error!", e);
@@ -111,11 +113,12 @@ public class UserSql implements IRepositoryUser<User,UUID> {
             statement.setObject(2,entity.getName());
             statement.setObject(3,entity.getEmail());
             statement.setObject(4,entity.getPassword());
-            statement.setObject(5,entity.getLastName());
-            statement.setObject(6,entity.getSurName());
-            statement.setObject(7,entity.getAddress());
-            statement.setObject(8,entity.getPhone());
-            statement.setObject(9,entity.getId().toString());
+            statement.setObject(5,entity.getSalt());
+            statement.setObject(6,entity.getLastName());
+            statement.setObject(7,entity.getSurName());
+            statement.setObject(8,entity.getAddress());
+            statement.setObject(9,entity.getPhone());
+            statement.setObject(10,entity.getId().toString());
             statement.executeUpdate();
         } catch (SQLException e) {
             logger.error("Cant update User!",e);

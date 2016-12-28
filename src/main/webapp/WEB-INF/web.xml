@@ -77,6 +77,14 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
         <url-pattern>/OrderAdd</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>OrderEdit</servlet-name>
+        <servlet-class>Controllers.OrderControllers.OrderEdit</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OrderEdit</servlet-name>
+        <url-pattern>/OrderEdit</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>OrderList</servlet-name>
         <servlet-class>Controllers.OrderControllers.OrderList</servlet-class>
     </servlet>
@@ -85,12 +93,44 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
         <url-pattern>/OrderList</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>OrderListAdmin</servlet-name>
+        <servlet-class>Controllers.OrderControllers.OrderListAdmin</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OrderListAdmin</servlet-name>
+        <url-pattern>/OrderListAdmin</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>GroceryAdd</servlet-name>
         <servlet-class>Controllers.GroceryControllers.GroceryAdd</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>GroceryAdd</servlet-name>
         <url-pattern>/GroceryAdd</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>GroceryEdit</servlet-name>
+        <servlet-class>Controllers.GroceryControllers.GroceryEdit</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GroceryEdit</servlet-name>
+        <url-pattern>/GroceryEdit</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>GroceryDel</servlet-name>
+        <servlet-class>Controllers.GroceryControllers.GroceryDel</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GroceryDel</servlet-name>
+        <url-pattern>/GroceryDel</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>MappingError</servlet-name>
+        <servlet-class>Controllers.MappingError</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MappingError</servlet-name>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
 
 
@@ -115,16 +155,24 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
         <filter-name>AuthorizationFilter</filter-name>
         <url-pattern>/GroceryListAdmin</url-pattern>
         <url-pattern>/GroceryAdd</url-pattern>
+        <url-pattern>/GroceryEdit</url-pattern>
+        <url-pattern>/GroceryDel</url-pattern>
         <url-pattern>/CartAdd</url-pattern>
         <url-pattern>/CartList</url-pattern>
         <url-pattern>/CartRemove</url-pattern>
         <url-pattern>/OrderAdd</url-pattern>
         <url-pattern>/OrderList</url-pattern>
+        <url-pattern>/OrderEdit</url-pattern>
+        <url-pattern>/OrderListAdmin</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>AdminFilter</filter-name>
         <url-pattern>/GroceryListAdmin</url-pattern>
         <url-pattern>/GroceryAdd</url-pattern>
+        <url-pattern>/GroceryEdit</url-pattern>
+        <url-pattern>/GroceryDel</url-pattern>
+        <url-pattern>/OrderEdit</url-pattern>
+        <url-pattern>/OrderListAdmin</url-pattern>
     </filter-mapping>
   <!--  <filter>
         <filter-name>AuthorizationFilter</filter-name>

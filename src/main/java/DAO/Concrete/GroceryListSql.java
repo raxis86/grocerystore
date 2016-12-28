@@ -120,4 +120,22 @@ public class GroceryListSql implements IRepositoryGroceryList<GroceryList,UUID> 
         }
         return groceryLists;
     }
+
+    @Override
+    public List<GroceryList> getListByGroceryId(UUID id) {
+        List<GroceryList> groceryLists = new ArrayList<>();
+        try(PreparedStatement statement = Tool.getConnection().prepareStatement(GROCERYLIST_PREP_SELECT_BY_GROCERYID_QUERY);) {
+            statement.setObject(1,id.toString());
+            ResultSet resultSet=statement.executeQuery();
+            while (resultSet.next()){
+                GroceryList groceryList = new GroceryList();
+                fillGroceryList(groceryList,resultSet);
+                groceryLists.add(groceryList);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return groceryLists;
+    }
 }

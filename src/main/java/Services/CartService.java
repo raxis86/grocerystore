@@ -48,4 +48,10 @@ public class CartService {
         return cart;
     }
 
+    public void clearCart(HttpServletRequest req){
+        HttpSession session=req.getSession();
+        Cart cart = (Cart) session.getAttribute("cart");
+        cart.clear();
+    }
+
 }

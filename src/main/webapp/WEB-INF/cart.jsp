@@ -1,5 +1,4 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="Models.Grocery" %>
 <%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: raxis
@@ -14,17 +13,40 @@
     <title>Корзина покупок</title>
   </head>
   <body>
-    <%--<div> <a href="">Вход</a> </div>
-    <div> <a href="">Регистрация</a> </div>--%>
-    <div>
-      <nav>
-        <ul id="menu">
-          <li><a href="index.jsp">Главная</a></li>
-          <li><a href="/GroceryListController">Каталог товаров</a></li>
-        </ul>
 
-      </nav>
-    </div>
+  <div class="menu">
+    <c:if test="${empty sessionScope.user}" >
+      <div> <a href="/Login">Вход</a> </div>
+      <div> <a href="/Signin">Регистрация</a> </div>
+    </c:if>
+    <c:if test="${!empty sessionScope.user}" >
+      <div> ${sessionScope.user.getName()}!</div>
+      <div> <a href="/Logout">Выход</a> </div>
+    </c:if>
+  </div>
+
+  <div>
+    <nav>
+      <ul id="menu">
+        <li><a href="index.jsp">Главная</a></li>
+        <c:if test="${empty sessionScope.user}" >
+          <li><a href="/GroceryListController">Каталог товаров</a></li>
+        </c:if>
+        <c:if test="${!empty sessionScope.user}" >
+          <c:if test="${!sessionScope.role.getName().equals('admin')}" >
+            <li><a href="/GroceryListController">Каталог товаров</a></li>
+            <li><a href="/CartList">Корзина покупок</a></li>
+            <li><a href="/OrderList">Список заказов</a></li>
+          </c:if>
+          <c:if test="${sessionScope.role.getName().equals('admin')}" >
+            <li><a href="/OrderListAdmin">Список заказов (админ-режим)</a></li>
+            <li><a href="/GroceryListAdmin">Каталог товаров (админ-режим)</a></li>
+          </c:if>
+        </c:if>
+      </ul>
+    </nav>
+  </div>
+
     <Table>
       <tr>
         <th>Наименование</th>
@@ -44,8 +66,6 @@
             <input type="submit" value="Удалить из корзины">
           </form>
         </td>
-       <%-- <td><a href="studentdel.jsp?id=<%=s.getId().toString()%>">Удалить</a></td>
-        <td><a href="studentupd.jsp?id=<%=s.getId().toString()%>">Редактировать</a></td>--%>
       </tr>
       </br>
       </c:forEach>
@@ -56,16 +76,5 @@
     <div> <a href="/GroceryListController">Продолжить покупки</a> </div>
     <div> <a href="/OrderAdd">Оформить заказ</a> </div>
 
-      <%--<c:forEach items="${groceryList}" var="item">
-        ${item}<br>
-      </c:forEach>--%>
-
-   <%-- <c:forEach items="${groceryList}" var="item">
-      ${item.getPrice()}<br>
-    </c:forEach>--%>
-
-  <%--<%for(Grocery g : (List<Grocery>)request.getAttribute("grocerylist")){%>
-    <%=g.getName()%>
-  <%}%>
-  </body>--%>
+  </body>
 </html>

@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: raxis
@@ -11,6 +12,11 @@
     <title>Авторизация</title>
 </head>
 <body>
+    <c:forEach items="${messages}" var="item">
+        <div>${item}</div><br>
+    </c:forEach>
+    <H2>${message}</H2>
+
     <form action="/Login" method="post">
         Email:<input type="text" name="email"><br>
         Password:<input type="password" name="password"><br>

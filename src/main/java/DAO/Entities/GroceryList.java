@@ -3,12 +3,13 @@ package DAO.Entities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 /**
  * Created by raxis on 27.12.2016.
  */
-public class GroceryList {
+public class GroceryList implements Serializable {
     private static final Logger logger = LoggerFactory.getLogger(GroceryList.class);
 
     private UUID id;

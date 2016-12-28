@@ -2,7 +2,6 @@ package DAO.Concrete;
 
 import DAO.Abstract.IRepositoryGroceryList;
 import DAO.Entities.GroceryList;
-import Interfaces.IRepoGroceryList;
 import Tools.Tool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

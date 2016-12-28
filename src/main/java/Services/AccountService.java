@@ -21,9 +21,15 @@ import java.util.UUID;
 public class AccountService {
     private static final Logger logger = LoggerFactory.getLogger(AccountService.class);
 
+    private IRepositoryUser userHandler;
+    private IRepositoryRole roleHandler;
+
+    public AccountService(){
+        this.userHandler=new UserSql();
+        this.roleHandler=new RoleSql();
+    }
+
     public Message userLogin(String email, String password, HttpServletRequest req){
-        IRepositoryUser userHandler = new UserSql();
-        IRepositoryRole roleHandler = new RoleSql();
 
         //Ищем, что существует юзер с таким email
         User userByEmail = (User) userHandler.getOneByEmail(email.toLowerCase());
@@ -33,8 +39,6 @@ public class AccountService {
         }
 
         User user = (User) userHandler.getOne(email.toLowerCase(),Tool.computeHash(Tool.computeHash(password) + userByEmail.getSalt()));
-
-        //User user = (User) userHandler.getOne(email,Tool.computeHash(password));
 
         if(user!=null){
             Role role = (Role) roleHandler.getOne(user.getRoleID());
@@ -54,7 +58,6 @@ public class AccountService {
     public Message signIn(String email, String password, String name, String lastname,
                           String surname, String phone, String address) throws NoSavedInDbException {
         if(email.toLowerCase().matches("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$")){
-            IRepositoryUser userHandler = new UserSql();
             User user = (User) userHandler.getOneByEmail(email.toLowerCase());
 
 

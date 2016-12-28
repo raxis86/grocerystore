@@ -1,8 +1,5 @@
 package Controllers.AccountControllers;
 
-import Interfaces.IRepoUser;
-import Models.Role;
-import Models.User;
 import Services.AccountService;
 import Services.Message;
 import Tools.Tool;
@@ -45,19 +42,5 @@ public class Login extends HttpServlet{
             doGet(req,resp);
         }
 
-        /*IRepoUser user = new User().getOne(req.getParameter("email"),Tool.computeHash(req.getParameter("password")));
-
-
-        if(user!=null){
-            Role role = new Role().getOne(user.getRoleID());
-            HttpSession session = req.getSession(true);
-            session.setAttribute("user",user);
-            session.setAttribute("role",role);
-            String str;
-            str=req.getPathInfo();
-            str=req.getContextPath();
-            str=req.getPathTranslated();
-            str=req.getServletPath();
-        }*/
     }
 }

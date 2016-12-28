@@ -18,8 +18,21 @@ import java.util.*;
 public class OrderService {
     private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 
+    private IRepositoryOrder orderHandler;
+    private IRepositoryOrderStatus orderStatusHandler;
+    private IRepositoryGroceryList groceryListHandler;
+    private IRepositoryGrocery groceryHandler;
+    private IRepositoryUser userHandler;
+
+    public OrderService(){
+        this.orderHandler = new OrderSql();
+        this.orderStatusHandler = new OrderStatusSql();
+        this.groceryListHandler = new GroceryListSql();
+        this.groceryHandler = new GrocerySql();
+        this.userHandler = new UserSql();
+    }
+
     public Order createOrder(User user, Cart cart) throws NoSavedInDbException {
-        IRepositoryOrder orderHandler = new OrderSql();
 
         Order order = new Order();
         order.setId(UUID.randomUUID());
@@ -37,18 +50,11 @@ public class OrderService {
         return order;
     }
 
-    public OrderView formOrderView(HttpServletRequest req){
-        IRepositoryOrder orderHandler = new OrderSql();
-        IRepositoryOrderStatus orderStatusHandler = new OrderStatusSql();
-        IRepositoryGroceryList groceryListHandler = new GroceryListSql();
-        IRepositoryGrocery groceryHandler = new GrocerySql();
+    private OrderView formOrderView(UUID orderid, String userName){
         Map<String,Integer> map = new HashMap<>();
         Map<String,String> statusMap = new HashMap<>();
-        GroceryList groceryList = new GroceryList();
 
-        UUID uuid = UUID.fromString(req.getParameter("orderid"));
-
-        Order order = (Order) orderHandler.getOne(uuid);
+        Order order = (Order) orderHandler.getOne(orderid);
         List<GroceryList> groceryLists = groceryListHandler.getListById(order.getGrocerylistid());
         OrderStatus orderStatus = (OrderStatus) orderStatusHandler.getOne(order.getOrderstatusid());
         List<OrderStatus> orderStatusList = orderStatusHandler.getAll();
@@ -59,7 +65,7 @@ public class OrderService {
         orderView.setAddress(order.getAddress());
         orderView.setStatus(orderStatus.getStatus());
         orderView.setDate(order.getDatetime().toString());
-        orderView.setFullName("");
+        orderView.setFullName(userName);
         orderView.setPrice(order.getPrice().toString());
 
         for(GroceryList list:groceryLists){
@@ -77,81 +83,35 @@ public class OrderService {
         return orderView;
     }
 
+    public OrderView formOrderView(HttpServletRequest req){
+        return formOrderView(UUID.fromString(req.getParameter("orderid")),"");
+    }
+
     public List<OrderView> formOrderViewListAdmin(){
         List<OrderView> orderViewList = new ArrayList<>();
-        IRepositoryOrder orderHandler = new OrderSql();
-        IRepositoryGroceryList groceryListHandler = new GroceryListSql();
-        IRepositoryOrderStatus orderStatusHandler = new OrderStatusSql();
-        IRepositoryGrocery groceryHandler = new GrocerySql();
-        IRepositoryUser userHandler = new UserSql();
-
-        Order order = new Order();
         List<Order> orderList=orderHandler.getAll();
 
         for(Order repoOrder : orderList){
-            OrderView orderView = new OrderView();
-            Map<String,Integer> map = new HashMap<>();
-            GroceryList groceryList = new GroceryList();
-            List<GroceryList> groceryLists = groceryListHandler.getListById(repoOrder.getGrocerylistid());
-            String orderStatus = ((OrderStatus)orderStatusHandler.getOne(repoOrder.getOrderstatusid())).getStatus();
-
-            orderView.setId(repoOrder.getId().toString());
-            orderView.setFullName(((User)userHandler.getOne(repoOrder.getUserid())).getEmail());
-            orderView.setStatus(orderStatus);
-            orderView.setDate(repoOrder.getDatetime().toString());
-            orderView.setAddress(repoOrder.getAddress());
-            orderView.setPrice(repoOrder.getPrice().toString());
-            for(GroceryList list:groceryLists){
-                String str=((Grocery)groceryHandler.getOne(list.getGroceryId())).getName();
-                map.put(str,Integer.valueOf(list.getQuantity()));
-            }
-            orderView.setGroceries(map);
-
-            orderViewList.add(orderView);
+            orderViewList.add(formOrderView(repoOrder.getId(),((User)userHandler.getOne(repoOrder.getUserid())).getEmail()));
         }
 
         return orderViewList;
     }
 
     public List<OrderView> formOrderViewList(User user){
-
         List<OrderView> orderViewList = new ArrayList<>();
-        IRepositoryOrder orderHandler = new OrderSql();
-        IRepositoryGroceryList groceryListHandler = new GroceryListSql();
-        IRepositoryOrderStatus orderStatusHandler = new OrderStatusSql();
-        IRepositoryGrocery groceryHandler = new GrocerySql();
-
-        Order order = new Order();
         List<Order> orderList=orderHandler.getByUserId(user.getId());
 
         for(Order repoOrder : orderList){
-            if(repoOrder.getOrderstatusid().toString().equals("1c8d12cf-6b0a-4168-ae2a-cb416cf30da5"))continue;
-            OrderView orderView = new OrderView();
-            Map<String,Integer> map = new HashMap<>();
-            GroceryList groceryList = new GroceryList();
-            List<GroceryList> groceryLists = groceryListHandler.getListById(repoOrder.getGrocerylistid());
-            String orderStatus = ((OrderStatus)orderStatusHandler.getOne(repoOrder.getOrderstatusid())).getStatus();
-
-            orderView.setId(repoOrder.getId().toString());
-            orderView.setFullName(String.format("%s %s %s",user.getLastName(),user.getName(),user.getSurName()));
-            orderView.setStatus(orderStatus);
-            orderView.setDate(repoOrder.getDatetime().toString());
-            orderView.setAddress(repoOrder.getAddress());
-            orderView.setPrice(repoOrder.getPrice().toString());
-            for(GroceryList list:groceryLists){
-                String str=((Grocery)groceryHandler.getOne(list.getGroceryId())).getName();
-                map.put(str,Integer.valueOf(list.getQuantity()));
+            if(!repoOrder.getOrderstatusid().toString().equals("1c8d12cf-6b0a-4168-ae2a-cb416cf30da5")){
+                orderViewList.add(formOrderView(repoOrder.getId(),String.format("%s %s %s",user.getLastName(),user.getName(),user.getSurName())));
             }
-            orderView.setGroceries(map);
-
-            orderViewList.add(orderView);
         }
 
         return orderViewList;
     }
 
     public void updateOrder(String orderid) throws NoSavedInDbException {
-        IRepositoryOrder orderHandler = new OrderSql();
 
         Order order = (Order)orderHandler.getOne(UUID.fromString(orderid));
 
@@ -163,7 +123,6 @@ public class OrderService {
     }
 
     public void updateOrderAdmin(String orderid, String statusid) throws NoSavedInDbException {
-        IRepositoryOrder orderHandler = new OrderSql();
 
         Order order = (Order)orderHandler.getOne(UUID.fromString(orderid));
 
@@ -175,7 +134,6 @@ public class OrderService {
     }
 
     public Order getOrder(HttpServletRequest req){
-        IRepositoryOrder orderHandler = new OrderSql();
 
         UUID uuid = UUID.fromString(req.getParameter("orderid"));
 

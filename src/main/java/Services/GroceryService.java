@@ -21,13 +21,19 @@ import java.util.UUID;
 public class GroceryService {
     private static final Logger logger = LoggerFactory.getLogger(GroceryService.class);
 
+    private IRepositoryGrocery groceryHandler;
+    private IRepositoryGroceryList groceryListHandler;
+
+    public GroceryService(){
+        this.groceryHandler = new GrocerySql();
+        this.groceryListHandler = new GroceryListSql();
+    }
+
     public List<Grocery> getGroceryList(){
-        IRepositoryGrocery groceryHandler = new GrocerySql();
         return groceryHandler.getAll();
     }
 
     public Grocery getGrocery(HttpServletRequest req){
-        IRepositoryGrocery groceryHandler = new GrocerySql();
 
         UUID uuid = UUID.fromString(req.getParameter("groceryid"));
 
@@ -37,7 +43,7 @@ public class GroceryService {
     }
 
     public void groceryCreate(HttpServletRequest req) throws NoSavedInDbException {
-        IRepositoryGrocery groceryHandler = new GrocerySql();
+
         Grocery grocery = new Grocery();
 
         grocery.setId(UUID.randomUUID());
@@ -53,8 +59,6 @@ public class GroceryService {
     }
 
     public void groceryDelete(HttpServletRequest req) throws NoSavedInDbException {
-        IRepositoryGrocery groceryHandler = new GrocerySql();
-        IRepositoryGroceryList groceryListHandler = new GroceryListSql();
 
         Grocery grocery = (Grocery) groceryHandler.getOne(UUID.fromString(req.getParameter("groceryid")));
         List<GroceryList> groceryLists = groceryListHandler.getListByGroceryId(grocery.getId());
@@ -69,7 +73,6 @@ public class GroceryService {
     }
 
     public Message groceryUpdate(HttpServletRequest req) throws NoSavedInDbException {
-        IRepositoryGrocery groceryHandler = new GrocerySql();
 
         Grocery grocery = (Grocery) groceryHandler.getOne(UUID.fromString(req.getParameter("groceryid")));
 

@@ -1,7 +1,5 @@
 package Controllers.GroceryControllers;
 
-import Models.Grocery;
-import Models.Role;
 import Services.GroceryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,23 +25,11 @@ public class GroceryListAdmin extends HttpServlet {
 
         GroceryService groceryService = new GroceryService();
 
-        /*List<Grocery> groceryList = new Grocery().select();*/
-
         req.setAttribute("groceryList",groceryService.getGroceryList());
 
         RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/grocerylist_admin.jsp");
         rd.forward(req,resp);
 
-        /*HttpSession session = req.getSession();
-        Role role = (Role)session.getAttribute("role");
-        if((role!=null)&&(role.getName().equals("admin"))){
-            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/grocerylist_admin.jsp");
-            rd.forward(req,resp);
-        }
-        else{
-            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/deadend.jsp");
-            rd.forward(req,resp);
-        }*/
     }
 
     @Override

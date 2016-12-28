@@ -62,7 +62,6 @@
         <td>
           <form action="/CartRemove" method="post">
             <input type="hidden" name="groceryid" value="${item.key.getId()}">
-              <%--<input type="hidden" name="returnurl" value="${req.requestURI}">--%>
             <input type="submit" value="Удалить из корзины">
           </form>
         </td>

@@ -1,6 +1,5 @@
 package Controllers.CartController;
 
-import Models.Grocery;
 import Services.Cart;
 import Services.CartService;
 import org.slf4j.Logger;
@@ -34,19 +33,6 @@ public class CartRemove extends HttpServlet {
 
         cartService.removeFromCart(req.getParameter("groceryid"),req);
 
-        /*Grocery grocery = new Grocery().selectOne(UUID.fromString(req.getParameter("groceryid")));
-
-        if(grocery!=null){
-            HttpSession session = req.getSession();
-            Cart cart = (Cart)session.getAttribute("cart");
-*//*            if(cart==null){
-                cart=new Cart();
-                session.setAttribute("cart",cart);
-            }*//*
-            cart.removeItem(grocery);
-        }*/
-        //String str=req.getParameter("returnurl");
-        //RequestDispatcher rd=req.getRequestDispatcher(req.getParameter("returnurl"));
         RequestDispatcher rd=req.getRequestDispatcher("/CartList");
         rd.forward(req,resp);
     }

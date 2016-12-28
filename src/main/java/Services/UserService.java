@@ -16,8 +16,13 @@ import javax.servlet.http.HttpSession;
 public class UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
+    private IRepositoryUser userHandler;
+
+    public UserService(){
+        this.userHandler = new UserSql();
+    }
+
     public void updateUser(User user, String name, String lastname, String surname, String address, String phone) throws NoSavedInDbException {
-        IRepositoryUser userHandler = new UserSql();
 
         user.setName(name);
         user.setLastName(lastname);

@@ -30,10 +30,6 @@ public class CartList extends HttpServlet {
 
         CartService cartService = new CartService();
 
-        /*HttpSession session=req.getSession();
-
-        Cart cart = (Cart) session.getAttribute("cart");*/
-
         if(cartService.cartFromSession(req)!=null){
             req.setAttribute("cart",cartService.cartFromSession(req));
             req.setAttribute("totalprice",cartService.cartFromSession(req).computeTotalPrice().toString());

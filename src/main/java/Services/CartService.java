@@ -16,8 +16,13 @@ import java.util.UUID;
 public class CartService {
     private static final Logger logger = LoggerFactory.getLogger(CartService.class);
 
+    private IRepositoryGrocery groceryHandler;
+
+    public CartService(){
+        this.groceryHandler=new GrocerySql();
+    }
+
     public void addToCart(String groceryid, HttpServletRequest req){
-        IRepositoryGrocery groceryHandler = new GrocerySql();
         Grocery grocery = (Grocery) groceryHandler.getOne(UUID.fromString(groceryid));
 
         if(grocery!=null){
@@ -32,7 +37,6 @@ public class CartService {
     }
 
     public void removeFromCart(String groceryid, HttpServletRequest req){
-        IRepositoryGrocery groceryHandler = new GrocerySql();
         Grocery grocery = (Grocery) groceryHandler.getOne(UUID.fromString(groceryid));
 
         if(grocery!=null){

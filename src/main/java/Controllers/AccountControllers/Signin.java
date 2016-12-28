@@ -1,8 +1,5 @@
 package Controllers.AccountControllers;
 
-import Interfaces.IRepoUser;
-import Models.Role;
-import Models.User;
 import Services.AccountService;
 import Services.Exceptions.NoSavedInDbException;
 import Services.Message;
@@ -66,40 +63,5 @@ public class Signin extends HttpServlet {
             doGet(req,resp);
         }
 
-        /*String email=req.getParameter("email").toLowerCase();
-        if(email.matches("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$")){
-            IRepoUser user = new User();
-            user.setId(UUID.randomUUID());
-            user.setEmail(email);
-            user.setPassword(Tool.computeHash(req.getParameter("password")));
-            user.setName(req.getParameter("name"));
-            user.setLastName(req.getParameter("lastname"));
-            user.setSurName(req.getParameter("surname"));
-            user.setPhone(req.getParameter("phone"));
-            user.setAddress(req.getParameter("address"));
-
-            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/signinsuccess.jsp");
-            rd.forward(req,resp);
-        }
-        else {
-            req.setAttribute("message","email некорректен!");
-            doGet(req,resp);
-        }*/
-        /*User user = new User().getOne(req.getParameter("email"), Tool.computeHash(req.getParameter("password")));
-
-
-        if(user!=null){
-            Role role = new Role().getOne(user.getRoleID());
-            HttpSession session = req.getSession(true);
-            session.setAttribute("user",user);
-            session.setAttribute("role",role);
-            String str;
-            str=req.getPathInfo();
-            str=req.getContextPath();
-            str=req.getPathTranslated();
-            str=req.getServletPath();
-        }
-        RequestDispatcher rd=req.getRequestDispatcher("/index.jsp");
-        rd.forward(req,resp);*/
     }
 }

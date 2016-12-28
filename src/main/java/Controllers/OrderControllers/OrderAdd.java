@@ -1,9 +1,5 @@
 package Controllers.OrderControllers;
 
-import Models.Grocery;
-import Models.GroceryList;
-import Models.Order;
-import Models.User;
 import Services.*;
 import Services.Exceptions.NoSavedInDbException;
 import org.slf4j.Logger;
@@ -30,11 +26,6 @@ public class OrderAdd extends HttpServlet{
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
-
-        /*HttpSession session=req.getSession();
-
-        Cart cart = (Cart) session.getAttribute("cart");
-        User user = (User) session.getAttribute("user");*/
 
         CartService cartService = new CartService();
         UserService userService = new UserService();

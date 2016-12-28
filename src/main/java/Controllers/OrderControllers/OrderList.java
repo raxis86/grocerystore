@@ -1,7 +1,5 @@
 package Controllers.OrderControllers;
 
-import Interfaces.*;
-import Models.*;
 import Services.Exceptions.NoSavedInDbException;
 import Services.OrderService;
 import Services.UserService;
@@ -29,37 +27,8 @@ public class OrderList extends HttpServlet {
 
         UserService userService = new UserService();
         OrderService orderService = new OrderService();
-        /*HttpSession session=req.getSession();
-        IRepoUser user = (User) session.getAttribute("user");*/
 
         if(userService.userFromSession(req)!=null){
-            /*List<OrderView> orderViewList = new ArrayList<>();
-
-            IRepoOrder order = new Order();
-            List<IRepoOrder> orderList=order.selectByUserId(user.getId());
-
-            for(IRepoOrder repoOrder : orderList){
-                OrderView orderView = new OrderView();
-                Map<String,Integer> map = new HashMap<>();
-                IRepoGroceryList groceryList = new GroceryList();
-                List<IRepoGroceryList> groceryLists = groceryList.select(repoOrder.getGrocerylistid());
-                String orderStatus = new OrderStatus().selectOne(repoOrder.getOrderstatusid()).getStatus();
-
-                orderView.setId(repoOrder.getId().toString());
-                orderView.setFullName(String.format("%s %s %s",user.getLastName(),user.getName(),user.getSurName()));
-                orderView.setStatus(orderStatus);
-                orderView.setDate(repoOrder.getDatetime().toString());
-                orderView.setAddress(repoOrder.getAddress());
-                orderView.setPrice(repoOrder.getPrice().toString());
-                for(IRepoGroceryList list:groceryLists){
-                    String str=new Grocery().selectOne(list.getGroceryId()).getName();
-                    map.put(str,Integer.valueOf(list.getQuantity()));
-                }
-                orderView.setGroceries(map);
-
-                orderViewList.add(orderView);
-            }*/
-
 
             req.setAttribute("orderlist",orderService.formOrderViewList(userService.userFromSession(req)));
 
@@ -88,12 +57,6 @@ public class OrderList extends HttpServlet {
             RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/savetodberror.jsp");
             rd.forward(req,resp);
         }
-
-        /*IRepoOrder order = new Order().selectOne(UUID.fromString(req.getParameter("orderid")));
-
-        order.setOrderstatusid(UUID.fromString("1c8d12cf-6b0a-4168-ae2a-cb416cf30da5"));
-
-        order.update();*/
 
         RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/grocerylist.jsp");
         rd.forward(req,resp);

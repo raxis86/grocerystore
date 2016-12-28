@@ -1,6 +1,5 @@
 package Controllers.GroceryControllers;
 
-import Models.Grocery;
 import Services.GroceryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,25 +29,11 @@ public class GroceryListController extends HttpServlet {
 
         GroceryService groceryService = new GroceryService();
 
-        /*List<Grocery> groceryList = new Grocery().select();*/
-
         req.setAttribute("groceryList",groceryService.getGroceryList());
-
-        //List<Grocery> groceryList = new Grocery().select();
-
-
-        //HttpSession session = req.getSession();
-
-        //session.setAttribute("grocerylist",groceryList);
-
-
-        //req.setAttribute("groceryList",groceryList);
 
 
         RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/grocerylist.jsp");
         rd.forward(req,resp);
 
-
-        //resp.sendRedirect("grocerylist.jsp");
     }
 }

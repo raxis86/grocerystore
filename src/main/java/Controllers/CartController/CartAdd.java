@@ -1,6 +1,5 @@
 package Controllers.CartController;
 
-import Models.Grocery;
 import Services.Cart;
 import Services.CartService;
 import org.slf4j.Logger;
@@ -29,19 +28,6 @@ public class CartAdd extends HttpServlet {
 
         cartService.addToCart(req.getParameter("groceryid"),req);
 
-        /*Grocery grocery = new Grocery().selectOne(UUID.fromString(req.getParameter("groceryid")));
-
-        if(grocery!=null){
-            HttpSession session = req.getSession();
-            Cart cart = (Cart)session.getAttribute("cart");
-            if(cart==null){
-                cart=new Cart();
-                session.setAttribute("cart",cart);
-            }
-            cart.addItem(grocery,1);
-        }*/
-        //String str=req.getParameter("returnurl");
-        //RequestDispatcher rd=req.getRequestDispatcher(req.getParameter("returnurl"));
         RequestDispatcher rd=req.getRequestDispatcher("/GroceryListController");
         rd.forward(req,resp);
     }
@@ -50,8 +36,6 @@ public class CartAdd extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        //HttpSession session = req.getSession();
-        //session.setAttribute("");
     }
 
 }

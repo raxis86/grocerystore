@@ -18,8 +18,13 @@ import java.util.UUID;
 public class GroceryListService {
     private static final Logger logger = LoggerFactory.getLogger(GroceryListService.class);
 
+    private IRepositoryGroceryList groceryListHandler;
+
+    public GroceryListService(){
+        this.groceryListHandler = new GroceryListSql();
+    }
+
     public void createGroceryList(Cart cart, Order order) throws NoSavedInDbException {
-        IRepositoryGroceryList groceryListHandler = new GroceryListSql();
 
         for(Map.Entry entry : cart.getMap().entrySet()){
             GroceryList groceryList = new GroceryList();

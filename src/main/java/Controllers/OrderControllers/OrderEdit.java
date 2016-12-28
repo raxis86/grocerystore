@@ -49,12 +49,6 @@ public class OrderEdit extends HttpServlet {
             rd.forward(req,resp);
         }
 
-        /*IRepoOrder order = new Order().selectOne(UUID.fromString(req.getParameter("orderid")));
-
-        order.setOrderstatusid(UUID.fromString("1c8d12cf-6b0a-4168-ae2a-cb416cf30da5"));
-
-        order.update();*/
-
         RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/orderlist_admin.jsp");
         rd.forward(req,resp);
     }

@@ -1,8 +1,5 @@
 package Tools;
 
-import Interfaces.IRepo;
-import Models.Grocery;
-import Models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +41,7 @@ public class Tool {
             Properties properties = new Properties();
             properties.setProperty("characterEncoding","utf-8");
             properties.setProperty("user","root");
-            properties.setProperty("password","yamaha");
+            properties.setProperty("password","123");
             properties.setProperty("verifyServerCertificate","false");
             properties.setProperty("useSSL","false");
             properties.setProperty("useJDBCCompliantTimezoneShift","true");

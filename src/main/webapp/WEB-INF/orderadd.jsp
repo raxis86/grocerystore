@@ -1,5 +1,4 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="Models.Grocery" %>
 <%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: raxis

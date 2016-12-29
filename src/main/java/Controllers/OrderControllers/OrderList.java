@@ -1,8 +1,9 @@
 package Controllers.OrderControllers;
 
+import Domain.Entities.User;
+import Services.Abstract.IOrderService;
+import Services.Concrete.OrderService;
 import Services.Exceptions.NoSavedInDbException;
-import Services.OrderService;
-import Services.UserService;
 import Services.ViewModels.OrderView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.*;
 
@@ -25,7 +27,7 @@ public class OrderList extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        UserService userService = new UserService();
+        /*UserService userService = new UserService();
         OrderService orderService = new OrderService();
 
         if(userService.userFromSession(req)!=null){
@@ -39,15 +41,46 @@ public class OrderList extends HttpServlet {
         else {
             RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/deadend.jsp");
             rd.forward(req,resp);
-        }
+        }*/
 
+        IOrderService orderService = new OrderService();
+
+        HttpSession session = req.getSession();
+        User user = (User) session.getAttribute("user");
+
+        if(user!=null){
+
+            req.setAttribute("orderlist",orderService.formOrderViewList(user));
+
+            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/orderlist.jsp");
+            rd.forward(req,resp);
+
+        }
+        else {
+            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/deadend.jsp");
+            rd.forward(req,resp);
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        OrderService orderService = new OrderService();
+        /*OrderService orderService = new OrderService();
+
+        try {
+            orderService.updateOrder(req.getParameter("orderid"));
+            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/grocerylist.jsp");
+            rd.forward(req,resp);
+        } catch (NoSavedInDbException e) {
+            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/savetodberror.jsp");
+            rd.forward(req,resp);
+        }
+
+        RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/grocerylist.jsp");
+        rd.forward(req,resp);*/
+
+        IOrderService orderService = new OrderService();
 
         try {
             orderService.updateOrder(req.getParameter("orderid"));

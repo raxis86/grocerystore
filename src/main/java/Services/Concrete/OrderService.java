@@ -1,22 +1,21 @@
-package Services;
+package Services.Concrete;
 
 import Domain.Abstract.*;
 import Domain.Concrete.*;
 import Domain.Entities.*;
+import Services.Abstract.IOrderService;
 import Services.Exceptions.NoSavedInDbException;
 import Services.Models.Cart;
 import Services.ViewModels.OrderView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
- * Created by raxis on 27.12.2016.
+ * Created by raxis on 29.12.2016.
  */
-@Deprecated
-public class OrderService {
+public class OrderService implements IOrderService {
     private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
 
     private IRepositoryOrder orderHandler;
@@ -33,8 +32,8 @@ public class OrderService {
         this.userHandler = new UserSql();
     }
 
+    @Override
     public Order createOrder(User user, Cart cart) throws NoSavedInDbException {
-
         Order order = new Order();
         order.setId(UUID.randomUUID());
         order.setUserid(user.getId());
@@ -51,55 +50,25 @@ public class OrderService {
         return order;
     }
 
-    private OrderView formOrderView(UUID orderid, String userName){
-        Map<String,Integer> map = new HashMap<>();
-        Map<String,String> statusMap = new HashMap<>();
-
-        Order order = orderHandler.getOne(orderid);
-        List<GroceryList> groceryLists = groceryListHandler.getListById(order.getGrocerylistid());
-        OrderStatus orderStatus = (OrderStatus) orderStatusHandler.getOne(order.getOrderstatusid());
-        List<OrderStatus> orderStatusList = orderStatusHandler.getAll();
-
-        OrderView orderView = new OrderView();
-
-        orderView.setId(order.getId().toString());
-        orderView.setAddress(order.getAddress());
-        orderView.setStatus(orderStatus.getStatus());
-        orderView.setDate(order.getDatetime().toString());
-        orderView.setFullName(userName);
-        orderView.setPrice(order.getPrice().toString());
-
-        for(GroceryList list:groceryLists){
-            String str=((Grocery)groceryHandler.getOne(list.getGroceryId())).getName();
-            map.put(str,Integer.valueOf(list.getQuantity()));
-        }
-        orderView.setGroceries(map);
-
-        for(OrderStatus os : orderStatusList){
-            statusMap.put(os.getId().toString(),os.getStatus());
-        }
-
-        orderView.setStatuses(statusMap);
-
-        return orderView;
+    @Override
+    public OrderView formOrderView(String orderid) {
+        return formOrderView(UUID.fromString(orderid),"");
     }
 
-    public OrderView formOrderView(HttpServletRequest req){
-        return formOrderView(UUID.fromString(req.getParameter("orderid")),"");
-    }
-
-    public List<OrderView> formOrderViewListAdmin(){
+    @Override
+    public List<OrderView> formOrderViewListAdmin() {
         List<OrderView> orderViewList = new ArrayList<>();
         List<Order> orderList=orderHandler.getAll();
 
         for(Order repoOrder : orderList){
-            orderViewList.add(formOrderView(repoOrder.getId(),((User)userHandler.getOne(repoOrder.getUserid())).getEmail()));
+            orderViewList.add(formOrderView(repoOrder.getId(),userHandler.getOne(repoOrder.getUserid()).getEmail()));
         }
 
         return orderViewList;
     }
 
-    public List<OrderView> formOrderViewList(User user){
+    @Override
+    public List<OrderView> formOrderViewList(User user) {
         List<OrderView> orderViewList = new ArrayList<>();
         List<Order> orderList=orderHandler.getByUserId(user.getId());
 
@@ -112,9 +81,9 @@ public class OrderService {
         return orderViewList;
     }
 
+    @Override
     public void updateOrder(String orderid) throws NoSavedInDbException {
-
-        Order order = (Order)orderHandler.getOne(UUID.fromString(orderid));
+        Order order = orderHandler.getOne(UUID.fromString(orderid));
 
         order.setOrderstatusid(UUID.fromString("1c8d12cf-6b0a-4168-ae2a-cb416cf30da5"));
 
@@ -123,9 +92,9 @@ public class OrderService {
         }
     }
 
+    @Override
     public void updateOrderAdmin(String orderid, String statusid) throws NoSavedInDbException {
-
-        Order order = (Order)orderHandler.getOne(UUID.fromString(orderid));
+        Order order = orderHandler.getOne(UUID.fromString(orderid));
 
         order.setOrderstatusid(UUID.fromString(statusid));
 
@@ -134,12 +103,41 @@ public class OrderService {
         }
     }
 
-    public Order getOrder(HttpServletRequest req){
+    @Override
+    public Order getOrder(String orderid) {
+        return orderHandler.getOne(UUID.fromString(orderid));
+    }
 
-        UUID uuid = UUID.fromString(req.getParameter("orderid"));
+    private OrderView formOrderView(UUID orderid, String userName){
+        Map<String,Integer> map = new HashMap<>();
+        Map<String,String> statusMap = new HashMap<>();
 
-        Order order = (Order) orderHandler.getOne(uuid);
+        Order order = orderHandler.getOne(orderid);
+        List<GroceryList> groceryLists = groceryListHandler.getListById(order.getGrocerylistid());
+        OrderStatus orderStatus = orderStatusHandler.getOne(order.getOrderstatusid());
+        List<OrderStatus> orderStatusList = orderStatusHandler.getAll();
 
-        return order;
+        OrderView orderView = new OrderView();
+
+        orderView.setId(order.getId().toString());
+        orderView.setAddress(order.getAddress());
+        orderView.setStatus(orderStatus.getStatus());
+        orderView.setDate(order.getDatetime().toString());
+        orderView.setFullName(userName);
+        orderView.setPrice(order.getPrice().toString());
+
+        for(GroceryList list:groceryLists){
+            String str=groceryHandler.getOne(list.getGroceryId()).getName();
+            map.put(str,Integer.valueOf(list.getQuantity()));
+        }
+        orderView.setGroceries(map);
+
+        for(OrderStatus os : orderStatusList){
+            statusMap.put(os.getId().toString(),os.getStatus());
+        }
+
+        orderView.setStatuses(statusMap);
+
+        return orderView;
     }
 }

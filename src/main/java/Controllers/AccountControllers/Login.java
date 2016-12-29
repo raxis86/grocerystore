@@ -1,8 +1,9 @@
 package Controllers.AccountControllers;
 
-import Services.AccountService;
-import Services.Message;
-import Tools.Tool;
+import Services.Abstract.IAccountService;
+import Services.Concrete.AccountService;
+import Services.Models.AuthUser;
+import Services.Models.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +31,7 @@ public class Login extends HttpServlet{
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        AccountService accountService = new AccountService();
+        /*AccountService accountService = new AccountService();
 
         Message message = accountService.userLogin(req.getParameter("email"),req.getParameter("password"),req);
         if(message.isOk()){
@@ -39,6 +40,22 @@ public class Login extends HttpServlet{
         }
         else {
             req.setAttribute("messages",message.getMessagesError());
+            doGet(req,resp);
+        }*/
+
+        IAccountService accountService = new AccountService();
+
+        AuthUser authUser = accountService.logIn(req.getParameter("email"),req.getParameter("password"));
+
+        if(authUser.getMessage().isOk()){
+            HttpSession session = req.getSession(true);
+            session.setAttribute("user",authUser.getUser());
+            session.setAttribute("role",authUser.getRole());
+            RequestDispatcher rd=req.getRequestDispatcher("/index.jsp");
+            rd.forward(req,resp);
+        }
+        else {
+            req.setAttribute("messages",authUser.getMessage().getMessagesError());
             doGet(req,resp);
         }
 

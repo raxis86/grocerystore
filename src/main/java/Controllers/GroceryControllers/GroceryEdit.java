@@ -1,7 +1,8 @@
 package Controllers.GroceryControllers;
 
+import Services.Abstract.IGroceryService;
+import Services.Concrete.GroceryService;
 import Services.Exceptions.NoSavedInDbException;
-import Services.GroceryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +23,7 @@ public class GroceryEdit extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        GroceryService groceryService = new GroceryService();
+        /*GroceryService groceryService = new GroceryService();
 
         try {
             groceryService.groceryUpdate(req);
@@ -31,16 +32,37 @@ public class GroceryEdit extends HttpServlet {
         } catch (NoSavedInDbException e) {
             RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/savetodberror.jsp");
             rd.forward(req,resp);
+        }*/
+
+        IGroceryService groceryService = new GroceryService();
+
+        try {
+            groceryService.groceryUpdate(req.getParameter("groceryid"),
+                                         req.getParameter("name"),
+                                         req.getParameter("price"),
+                                         req.getParameter("quantity"));
+            RequestDispatcher rd = req.getRequestDispatcher("/GroceryListAdmin");
+            rd.forward(req,resp);
+        } catch (NoSavedInDbException e) {
+            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/savetodberror.jsp");
+            rd.forward(req,resp);
         }
+
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        GroceryService groceryService = new GroceryService();
+        /*GroceryService groceryService = new GroceryService();
 
         req.setAttribute("grocery",groceryService.getGrocery(req));
+        RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/groceryedit_admin.jsp");
+        rd.forward(req,resp);*/
+
+        IGroceryService groceryService = new GroceryService();
+
+        req.setAttribute("grocery",groceryService.getGrocery(req.getParameter("groceryid")));
         RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/groceryedit_admin.jsp");
         rd.forward(req,resp);
     }

@@ -1,6 +1,7 @@
 package Controllers.GroceryControllers;
 
-import Services.GroceryService;
+import Services.Abstract.IGroceryService;
+import Services.Concrete.GroceryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,13 +24,19 @@ public class GroceryListAdmin extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        GroceryService groceryService = new GroceryService();
+        /*GroceryService groceryService = new GroceryService();
 
         req.setAttribute("groceryList",groceryService.getGroceryList());
 
         RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/grocerylist_admin.jsp");
-        rd.forward(req,resp);
+        rd.forward(req,resp);*/
 
+        IGroceryService groceryService = new GroceryService();
+
+        req.setAttribute("groceryList", groceryService.getGroceryList());
+
+        RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/grocerylist_admin.jsp");
+        rd.forward(req,resp);
     }
 
     @Override

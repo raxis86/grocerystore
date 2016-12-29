@@ -1,4 +1,4 @@
-package Services;
+package Services.Concrete;
 
 import Domain.Abstract.IRepositoryGrocery;
 import Domain.Abstract.IRepositoryGroceryList;
@@ -6,21 +6,20 @@ import Domain.Concrete.GroceryListSql;
 import Domain.Concrete.GrocerySql;
 import Domain.Entities.Grocery;
 import Domain.Entities.GroceryList;
+import Services.Abstract.IGroceryService;
 import Services.Exceptions.NoSavedInDbException;
 import Services.Models.Message;
 import javafx.util.converter.BigDecimalStringConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by raxis on 27.12.2016.
+ * Created by raxis on 29.12.2016.
  */
-@Deprecated
-public class GroceryService {
+public class GroceryService implements IGroceryService {
     private static final Logger logger = LoggerFactory.getLogger(GroceryService.class);
 
     private IRepositoryGrocery groceryHandler;
@@ -31,38 +30,36 @@ public class GroceryService {
         this.groceryListHandler = new GroceryListSql();
     }
 
-    public List<Grocery> getGroceryList(){
+
+    @Override
+    public List<Grocery> getGroceryList() {
         return groceryHandler.getAll();
     }
 
-    public Grocery getGrocery(HttpServletRequest req){
-
-        UUID uuid = UUID.fromString(req.getParameter("groceryid"));
-
-        Grocery grocery = (Grocery)  groceryHandler.getOne(uuid);
-
-        return grocery;
+    @Override
+    public Grocery getGrocery(String groceryid) {
+        return groceryHandler.getOne(UUID.fromString(groceryid));
     }
 
-    public void groceryCreate(HttpServletRequest req) throws NoSavedInDbException {
-
+    @Override
+    public void groceryCreate(String name, String price, String quantity) throws NoSavedInDbException {
         Grocery grocery = new Grocery();
 
         grocery.setId(UUID.randomUUID());
         grocery.setIscategory(false);
         grocery.setParentid(new UUID(0L,0L));
-        grocery.setName(req.getParameter("name"));
-        grocery.setPrice(new BigDecimalStringConverter().fromString(req.getParameter("price")));
-        grocery.setQuantity(Integer.parseInt(req.getParameter("quantity")));
+        grocery.setName(name);
+        grocery.setPrice(new BigDecimalStringConverter().fromString(price));
+        grocery.setQuantity(Integer.parseInt(quantity));
 
         if(!groceryHandler.create(grocery)){
             throw new NoSavedInDbException();
         }
     }
 
-    public void groceryDelete(HttpServletRequest req) throws NoSavedInDbException {
-
-        Grocery grocery = (Grocery) groceryHandler.getOne(UUID.fromString(req.getParameter("groceryid")));
+    @Override
+    public void groceryDelete(String groceryid) throws NoSavedInDbException {
+        Grocery grocery = groceryHandler.getOne(UUID.fromString(groceryid));
         List<GroceryList> groceryLists = groceryListHandler.getListByGroceryId(grocery.getId());
 
         if(!groceryHandler.delete(grocery.getId())){
@@ -74,14 +71,14 @@ public class GroceryService {
         }
     }
 
-    public Message groceryUpdate(HttpServletRequest req) throws NoSavedInDbException {
-
-        Grocery grocery = (Grocery) groceryHandler.getOne(UUID.fromString(req.getParameter("groceryid")));
+    @Override
+    public Message groceryUpdate(String groceryid, String name, String price, String quantity) throws NoSavedInDbException {
+        Grocery grocery = groceryHandler.getOne(UUID.fromString(groceryid));
 
         if(grocery!=null){
-            grocery.setName(req.getParameter("name"));
-            grocery.setPrice(new BigDecimalStringConverter().fromString(req.getParameter("price")));
-            grocery.setQuantity(Integer.parseInt(req.getParameter("quantity")));
+            grocery.setName(name);
+            grocery.setPrice(new BigDecimalStringConverter().fromString(price));
+            grocery.setQuantity(Integer.parseInt(quantity));
 
             if(!groceryHandler.update(grocery)){
                 throw new NoSavedInDbException();

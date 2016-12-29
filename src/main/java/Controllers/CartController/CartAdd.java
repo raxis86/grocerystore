@@ -1,7 +1,8 @@
 package Controllers.CartController;
 
-import Services.Cart;
-import Services.CartService;
+import Services.Abstract.ICartService;
+import Services.Concrete.CartService;
+import Services.Models.Cart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.UUID;
 
 /**
  * Created by raxis on 25.12.2016.
@@ -31,9 +31,21 @@ public class CartAdd extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        CartService cartService = new CartService();
+        ICartService cartService = new CartService();
 
+        /*CartService cartService = new CartService();
         cartService.addToCart(req.getParameter("groceryid"),req);
+
+        RequestDispatcher rd=req.getRequestDispatcher("/GroceryListController");
+        rd.forward(req,resp);*/
+
+        HttpSession session = req.getSession();
+        Cart cart = (Cart)session.getAttribute("cart");
+        if(cart==null){
+            cart=new Cart();
+            session.setAttribute("cart",cart);
+        }
+        cartService.addToCart(cart,req.getParameter("groceryid"));
 
         RequestDispatcher rd=req.getRequestDispatcher("/GroceryListController");
         rd.forward(req,resp);

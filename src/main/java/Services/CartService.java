@@ -1,8 +1,9 @@
 package Services;
 
-import DAO.Abstract.IRepositoryGrocery;
-import DAO.Concrete.GrocerySql;
-import DAO.Entities.Grocery;
+import Domain.Abstract.IRepositoryGrocery;
+import Domain.Concrete.GrocerySql;
+import Domain.Entities.Grocery;
+import Services.Models.Cart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +15,7 @@ import java.util.UUID;
  * Created by raxis on 27.12.2016.
  * Класс для работы с корзиной покупок
  */
+@Deprecated
 public class CartService {
     private static final Logger logger = LoggerFactory.getLogger(CartService.class);
 

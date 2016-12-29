@@ -1,7 +1,7 @@
 package Controllers.OrderControllers;
 
-import Services.OrderService;
-import Services.UserService;
+import Services.Abstract.IOrderService;
+import Services.Concrete.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,8 +22,15 @@ public class OrderListAdmin extends HttpServlet{
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        UserService userService = new UserService();
+        /*UserService userService = new UserService();
         OrderService orderService = new OrderService();
+
+        req.setAttribute("orderlist",orderService.formOrderViewListAdmin());
+
+        RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/orderlist_admin.jsp");
+        rd.forward(req,resp);*/
+
+        IOrderService orderService = new OrderService();
 
         req.setAttribute("orderlist",orderService.formOrderViewListAdmin());
 

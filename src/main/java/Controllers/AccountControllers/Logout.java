@@ -1,6 +1,5 @@
 package Controllers.AccountControllers;
 
-import Services.AccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,9 +21,11 @@ public class Logout extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        AccountService accountService = new AccountService();
-        accountService.userLogout(req);
+        /*AccountService accountService = new AccountService();
+        accountService.userLogout(req);*/
 
+        HttpSession session=req.getSession();
+        session.invalidate();
 
         RequestDispatcher rd = req.getRequestDispatcher("/index.jsp");
         rd.forward(req,resp);

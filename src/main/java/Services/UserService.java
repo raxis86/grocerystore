@@ -1,8 +1,8 @@
 package Services;
 
-import DAO.Abstract.IRepositoryUser;
-import DAO.Concrete.UserSql;
-import DAO.Entities.User;
+import Domain.Abstract.IRepositoryUser;
+import Domain.Concrete.UserSql;
+import Domain.Entities.User;
 import Services.Exceptions.NoSavedInDbException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 /**
  * Created by raxis on 27.12.2016.
  */
+@Deprecated
 public class UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 

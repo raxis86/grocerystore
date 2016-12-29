@@ -1,6 +1,6 @@
 package Filters;
 
-import DAO.Entities.User;
+import Domain.Entities.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

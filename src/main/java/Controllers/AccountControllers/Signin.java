@@ -1,9 +1,12 @@
 package Controllers.AccountControllers;
 
-import Services.AccountService;
+import Services.Abstract.IAccountService;
+import Services.Abstract.IUserService;
+import Services.Concrete.AccountService;
+import Services.Concrete.UserService;
 import Services.Exceptions.NoSavedInDbException;
-import Services.Message;
-import Tools.Tool;
+import Services.Models.AuthUser;
+import Services.Models.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,9 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.UUID;
 
 /**
  * Created by raxis on 27.12.2016.
@@ -38,7 +39,7 @@ public class Signin extends HttpServlet {
         req.setAttribute("phone",req.getParameter("phone"));
         req.setAttribute("address",req.getParameter("address"));
 
-        AccountService accountService = new AccountService();
+        /*AccountService accountService = new AccountService();
         Message message = new Message();
         try {
             message =
@@ -61,7 +62,32 @@ public class Signin extends HttpServlet {
         else {
             req.setAttribute("messages",message.getMessagesError());
             doGet(req,resp);
+        }*/
+
+        IAccountService accountService = new AccountService();
+        IUserService userService = new UserService();
+
+        AuthUser authUser=new AuthUser();
+        try {
+            authUser = accountService.signIn(userService.formUser(req.getParameter("email"),
+                                                                  req.getParameter("password"),
+                                                                  req.getParameter("name"),
+                                                                  req.getParameter("lastname"),
+                                                                  req.getParameter("surname"),
+                                                                  req.getParameter("address"),
+                                                                  req.getParameter("phone")));
+        } catch (NoSavedInDbException e) {
+            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/savetodberror.jsp");
+            rd.forward(req,resp);
         }
 
+        if(authUser.getMessage().isOk()){
+            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/signinsuccess.jsp");
+            rd.forward(req,resp);
+        }
+        else {
+            req.setAttribute("messages",authUser.getMessage().getMessagesError());
+            doGet(req,resp);
+        }
     }
 }

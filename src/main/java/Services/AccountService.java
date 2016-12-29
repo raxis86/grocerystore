@@ -1,12 +1,13 @@
 package Services;
 
-import DAO.Abstract.IRepositoryRole;
-import DAO.Abstract.IRepositoryUser;
-import DAO.Concrete.RoleSql;
-import DAO.Concrete.UserSql;
-import DAO.Entities.Role;
-import DAO.Entities.User;
+import Domain.Abstract.IRepositoryRole;
+import Domain.Abstract.IRepositoryUser;
+import Domain.Concrete.RoleSql;
+import Domain.Concrete.UserSql;
+import Domain.Entities.Role;
+import Domain.Entities.User;
 import Services.Exceptions.NoSavedInDbException;
+import Services.Models.Message;
 import Tools.Tool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,7 @@ import java.util.UUID;
 /**
  * Created by raxis on 27.12.2016.
  */
+@Deprecated
 public class AccountService {
     private static final Logger logger = LoggerFactory.getLogger(AccountService.class);
 
@@ -32,13 +34,13 @@ public class AccountService {
     public Message userLogin(String email, String password, HttpServletRequest req){
 
         //Ищем, что существует юзер с таким email
-        User userByEmail = (User) userHandler.getOneByEmail(email.toLowerCase());
+        User userByEmail = userHandler.getOneByEmail(email.toLowerCase());
 
         if(userByEmail==null){
             return new Message("Пользователь с таким email не найден!", Message.Status.ERROR);
         }
 
-        User user = (User) userHandler.getOne(email.toLowerCase(),Tool.computeHash(Tool.computeHash(password) + userByEmail.getSalt()));
+        User user = userHandler.getOne(email.toLowerCase(),Tool.computeHash(Tool.computeHash(password) + userByEmail.getSalt()));
 
         if(user!=null){
             Role role = (Role) roleHandler.getOne(user.getRoleID());
@@ -58,7 +60,7 @@ public class AccountService {
     public Message signIn(String email, String password, String name, String lastname,
                           String surname, String phone, String address) throws NoSavedInDbException {
         if(email.toLowerCase().matches("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$")){
-            User user = (User) userHandler.getOneByEmail(email.toLowerCase());
+            User user = userHandler.getOneByEmail(email.toLowerCase());
 
 
             if(user==null){

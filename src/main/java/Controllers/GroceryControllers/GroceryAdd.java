@@ -31,16 +31,6 @@ public class GroceryAdd extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        /*GroceryService groceryService = new GroceryService();
-        try {
-            groceryService.groceryCreate(req);
-            RequestDispatcher rd = req.getRequestDispatcher("/GroceryListAdmin");
-            rd.forward(req,resp);
-        } catch (NoSavedInDbException e) {
-            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/savetodberror.jsp");
-            rd.forward(req,resp);
-        }*/
-
         IGroceryService groceryService = new GroceryService();
 
         try {

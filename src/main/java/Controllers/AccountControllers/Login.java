@@ -31,18 +31,6 @@ public class Login extends HttpServlet{
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        /*AccountService accountService = new AccountService();
-
-        Message message = accountService.userLogin(req.getParameter("email"),req.getParameter("password"),req);
-        if(message.isOk()){
-            RequestDispatcher rd=req.getRequestDispatcher("/index.jsp");
-            rd.forward(req,resp);
-        }
-        else {
-            req.setAttribute("messages",message.getMessagesError());
-            doGet(req,resp);
-        }*/
-
         IAccountService accountService = new AccountService();
 
         AuthUser authUser = accountService.logIn(req.getParameter("email"),req.getParameter("password"));

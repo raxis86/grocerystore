@@ -23,13 +23,6 @@ public class OrderEdit extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        /*OrderService orderService = new OrderService();
-
-        req.setAttribute("order",orderService.formOrderView(req));
-
-        RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/orderedit.jsp");
-        rd.forward(req,resp);*/
-
         IOrderService orderService = new OrderService();
 
         req.setAttribute("order",orderService.formOrderView(req.getParameter("orderid")));
@@ -42,23 +35,6 @@ public class OrderEdit extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
-
-        /*OrderService orderService = new OrderService();
-
-        try {
-            orderService.updateOrderAdmin(req.getParameter("orderid"),req.getParameter("statusid"));
-
-            req.setAttribute("orderlist",orderService.formOrderViewListAdmin());
-
-            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/orderlist_admin.jsp");
-            rd.forward(req,resp);
-        } catch (NoSavedInDbException e) {
-            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/savetodberror.jsp");
-            rd.forward(req,resp);
-        }
-
-        RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/orderlist_admin.jsp");
-        rd.forward(req,resp);*/
 
         IOrderService orderService = new OrderService();
 

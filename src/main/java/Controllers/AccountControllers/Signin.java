@@ -6,7 +6,6 @@ import Services.Concrete.AccountService;
 import Services.Concrete.UserService;
 import Services.Exceptions.NoSavedInDbException;
 import Services.Models.AuthUser;
-import Services.Models.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,31 +37,6 @@ public class Signin extends HttpServlet {
         req.setAttribute("surname",req.getParameter("surname"));
         req.setAttribute("phone",req.getParameter("phone"));
         req.setAttribute("address",req.getParameter("address"));
-
-        /*AccountService accountService = new AccountService();
-        Message message = new Message();
-        try {
-            message =
-            accountService.signIn(req.getParameter("email"),
-                                  req.getParameter("password"),
-                                  req.getParameter("name"),
-                                  req.getParameter("lastname"),
-                                  req.getParameter("surname"),
-                                  req.getParameter("phone"),
-                                  req.getParameter("address"));
-        } catch (NoSavedInDbException e) {
-            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/savetodberror.jsp");
-            rd.forward(req,resp);
-        }
-
-        if(message.isOk()){
-            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/signinsuccess.jsp");
-            rd.forward(req,resp);
-        }
-        else {
-            req.setAttribute("messages",message.getMessagesError());
-            doGet(req,resp);
-        }*/
 
         IAccountService accountService = new AccountService();
         IUserService userService = new UserService();

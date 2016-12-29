@@ -27,19 +27,6 @@ public class CartList extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        /*CartService cartService = new CartService();
-
-        if(cartService.cartFromSession(req)!=null){
-            req.setAttribute("cart",cartService.cartFromSession(req));
-            req.setAttribute("totalprice",cartService.cartFromSession(req).computeTotalPrice().toString());
-            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/cart.jsp");
-            rd.forward(req,resp);
-        }
-        else {
-            RequestDispatcher rd = req.getRequestDispatcher("/index.jsp");
-            rd.forward(req,resp);
-        }*/
-
         HttpSession session = req.getSession();
         Cart cart = (Cart)session.getAttribute("cart");
 

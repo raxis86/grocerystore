@@ -23,12 +23,6 @@ public class GroceryDel extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
 
-        /*GroceryService groceryService = new GroceryService();
-
-        req.setAttribute("grocery",groceryService.getGrocery(req));
-        RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/grocerydel_admin.jsp");
-        rd.forward(req,resp);*/
-
         IGroceryService groceryService = new GroceryService();
 
         req.setAttribute("grocery",groceryService.getGrocery(req.getParameter("groceryid")));
@@ -39,17 +33,6 @@ public class GroceryDel extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
-
-        /*GroceryService groceryService = new GroceryService();
-
-        try {
-            groceryService.groceryDelete(req);
-            RequestDispatcher rd = req.getRequestDispatcher("/GroceryListAdmin");
-            rd.forward(req,resp);
-        } catch (NoSavedInDbException e) {
-            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/savetodberror.jsp");
-            rd.forward(req,resp);
-        }*/
 
         IGroceryService groceryService = new GroceryService();
 

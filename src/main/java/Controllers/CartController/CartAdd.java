@@ -33,12 +33,6 @@ public class CartAdd extends HttpServlet {
 
         ICartService cartService = new CartService();
 
-        /*CartService cartService = new CartService();
-        cartService.addToCart(req.getParameter("groceryid"),req);
-
-        RequestDispatcher rd=req.getRequestDispatcher("/GroceryListController");
-        rd.forward(req,resp);*/
-
         HttpSession session = req.getSession();
         Cart cart = (Cart)session.getAttribute("cart");
         if(cart==null){

@@ -18,6 +18,7 @@ import static Constants.Constants.*;
 
 /**
  * Created by raxis on 27.12.2016.
+ * Реализакция DAO для работы с user в MySQL
  */
 public class UserSql implements IRepositoryUser {
     private static final Logger logger = LoggerFactory.getLogger(UserSql.class);

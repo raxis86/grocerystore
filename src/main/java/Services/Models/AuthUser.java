@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Created by raxis on 29.12.2016.
+ * Класс для хранения пользователя, роли
+ * и сообщений об операции с ними
  */
 public class AuthUser {
     private static final Logger logger = LoggerFactory.getLogger(AuthUser.class);

@@ -18,6 +18,7 @@ import static Constants.Constants.*;
 
 /**
  * Created by raxis on 27.12.2016.
+ * Реализакция DAO для работы с grocerylist в MySQL
  */
 public class GroceryListSql implements IRepositoryGroceryList {
     private static final Logger logger = LoggerFactory.getLogger(GroceryListSql.class);
@@ -40,7 +41,7 @@ public class GroceryListSql implements IRepositoryGroceryList {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Cant getall",e);
         }
         return groceryLists;
     }
@@ -56,7 +57,7 @@ public class GroceryListSql implements IRepositoryGroceryList {
                 fillGroceryList(groceryList,resultSet);
             }
         } catch (SQLException e) {
-            logger.error("Cant getOne Grocery!", e);
+            logger.error("Cant getOne GroceryList!", e);
             e.printStackTrace();
         }
         return groceryList;
@@ -70,6 +71,7 @@ public class GroceryListSql implements IRepositoryGroceryList {
             statement.setObject(3,entity.getQuantity());
             statement.execute();
         } catch (SQLException e) {
+            logger.error("cant create",e);
             e.printStackTrace();
             return false;
         }
@@ -82,6 +84,7 @@ public class GroceryListSql implements IRepositoryGroceryList {
             statement.setObject(1,id.toString());
             statement.execute();
         } catch (SQLException e) {
+            logger.error("cant delete",e);
             e.printStackTrace();
             return false;
         }
@@ -96,6 +99,7 @@ public class GroceryListSql implements IRepositoryGroceryList {
             statement.setObject(3,entity.getId().toString());
             statement.executeUpdate();
         } catch (SQLException e) {
+            logger.error("cant update",e);
             e.printStackTrace();
             return false;
         }
@@ -115,6 +119,7 @@ public class GroceryListSql implements IRepositoryGroceryList {
             }
 
         } catch (SQLException e) {
+            logger.error("cant getListById",e);
             e.printStackTrace();
         }
         return groceryLists;
@@ -133,6 +138,7 @@ public class GroceryListSql implements IRepositoryGroceryList {
             }
 
         } catch (SQLException e) {
+            logger.error("cant getListByGroceryId",e);
             e.printStackTrace();
         }
         return groceryLists;

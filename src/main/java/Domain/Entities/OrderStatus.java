@@ -8,12 +8,13 @@ import java.util.UUID;
 
 /**
  * Created by raxis on 27.12.2016.
+ * Статус заказа
  */
 public class OrderStatus implements Serializable {
     private static final Logger logger = LoggerFactory.getLogger(OrderStatus.class);
 
-    private UUID id;
-    private String status;
+    private UUID id;        //первичный ключ
+    private String status;  //наименование статуса
 
     public UUID getId() {
         return id;

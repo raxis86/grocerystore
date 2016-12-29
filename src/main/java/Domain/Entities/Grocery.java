@@ -9,16 +9,17 @@ import java.util.UUID;
 
 /**
  * Created by raxis on 27.12.2016.
+ * Класс для продуктов
  */
 public class Grocery implements Serializable {
     private static final Logger logger = LoggerFactory.getLogger(Grocery.class);
 
-    private UUID id;
-    private UUID parentid;
-    private boolean iscategory;
-    private String name;
-    private int quantity;
-    private BigDecimal price;
+    private UUID id;            //PK
+    private UUID parentid;      //ключ родителя (для иерархии каталогов)
+    private boolean iscategory; //флаг, что это каталог или продукт
+    private String name;        //наименование
+    private int quantity;       //количество
+    private BigDecimal price;   //цена
 
     public UUID getId() {
         return id;

@@ -11,6 +11,7 @@ import java.io.IOException;
 
 /**
  * Created by raxis on 25.12.2016.
+ * Фильтр для проверки, что пользователь авторизован
  */
 public class AuthorizationFilter implements Filter{
     private static final Logger logger = LoggerFactory.getLogger(AuthorizationFilter.class);

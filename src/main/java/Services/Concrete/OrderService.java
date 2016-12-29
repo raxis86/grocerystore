@@ -50,6 +50,11 @@ public class OrderService implements IOrderService {
         return order;
     }
 
+    /**
+     * формирование формы заказа для отображения
+     * @param orderid
+     * @return
+     */
     @Override
     public OrderView formOrderView(String orderid) {
         return formOrderView(UUID.fromString(orderid),"");

@@ -10,17 +10,18 @@ import java.util.UUID;
 
 /**
  * Created by raxis on 27.12.2016.
+ * Заказ
  */
 public class Order implements Serializable {
     private static final Logger logger = LoggerFactory.getLogger(Order.class);
 
-    private UUID id;
-    private UUID userid;
-    private UUID orderstatusid;
-    private UUID grocerylistid;
-    private BigDecimal price;
-    private Date datetime;
-    private String address;
+    private UUID id;            //первичный ключ
+    private UUID userid;        //код клиента
+    private UUID orderstatusid; //код статуса
+    private UUID grocerylistid; //код списка заказанных продуктов
+    private BigDecimal price;   //общая цена заказа
+    private Date datetime;      //дата и время заказа
+    private String address;     //адрес доставки
 
     public UUID getId() {
         return id;

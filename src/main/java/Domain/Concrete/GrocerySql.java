@@ -18,6 +18,7 @@ import static Constants.Constants.*;
 
 /**
  * Created by raxis on 27.12.2016.
+ * Реализакция DAO для работы с grocery в MySQL
  */
 public class GrocerySql implements IRepositoryGrocery {
     private static final Logger logger = LoggerFactory.getLogger(GrocerySql.class);
@@ -78,6 +79,7 @@ public class GrocerySql implements IRepositoryGrocery {
             statement.setObject(6,entity.getPrice());
             statement.execute();
         } catch (SQLException e) {
+            logger.error("cant create",e);
             e.printStackTrace();
             return false;
         }
@@ -90,6 +92,7 @@ public class GrocerySql implements IRepositoryGrocery {
             statement.setObject(1,id.toString());
             statement.execute();
         } catch (SQLException e) {
+            logger.error("cant delete",e);
             e.printStackTrace();
             return false;
         }
@@ -107,6 +110,7 @@ public class GrocerySql implements IRepositoryGrocery {
             statement.setObject(6,entity.getId().toString());
             statement.executeUpdate();
         } catch (SQLException e) {
+            logger.error("cant update",e);
             e.printStackTrace();
             return false;
         }

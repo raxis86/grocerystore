@@ -8,20 +8,21 @@ import java.util.UUID;
 
 /**
  * Created by raxis on 27.12.2016.
+ * Пользователь
  */
 public class User implements Serializable {
     private static final Logger logger = LoggerFactory.getLogger(User.class);
 
-    private UUID id;
-    private UUID roleID;
-    private String name;
-    private String email;
-    private String password;
-    private String salt;
-    private String lastName;
-    private String surName;
-    private String address;
-    private String phone;
+    private UUID id;        //первичный ключ
+    private UUID roleID;    //код роли
+    private String name;    //имя
+    private String email;   //email
+    private String password;//пароль
+    private String salt;    //соль для хэша
+    private String lastName;//фамилия
+    private String surName; //отчество
+    private String address; //адрес
+    private String phone;   //телефон
 
     public UUID getId() {
         return id;

@@ -18,6 +18,7 @@ import static Constants.Constants.*;
 
 /**
  * Created by raxis on 27.12.2016.
+ * Реализакция DAO для работы с order в MySQL
  */
 public class OrderSql implements IRepositoryOrder {
     private static final Logger logger = LoggerFactory.getLogger(OrderSql.class);
@@ -44,6 +45,7 @@ public class OrderSql implements IRepositoryOrder {
             }
 
         } catch (SQLException e) {
+            logger.error("cant getAll",e);
             e.printStackTrace();
         }
         return orderList;
@@ -78,6 +80,7 @@ public class OrderSql implements IRepositoryOrder {
             statement.setObject(7,entity.getAddress());
             statement.execute();
         } catch (SQLException e) {
+            logger.error("cant create",e);
             e.printStackTrace();
             return false;
         }
@@ -90,6 +93,7 @@ public class OrderSql implements IRepositoryOrder {
             statement.setObject(1,id.toString());
             statement.execute();
         } catch (SQLException e) {
+            logger.error("cant delete",e);
             e.printStackTrace();
             return false;
         }
@@ -108,6 +112,7 @@ public class OrderSql implements IRepositoryOrder {
             statement.setObject(7,entity.getId().toString());
             statement.executeUpdate();
         } catch (SQLException e) {
+            logger.error("cant update",e);
             e.printStackTrace();
             return false;
         }
@@ -127,6 +132,7 @@ public class OrderSql implements IRepositoryOrder {
             }
 
         } catch (SQLException e) {
+            logger.error("cant getByUserId",e);
             e.printStackTrace();
         }
         return orderList;

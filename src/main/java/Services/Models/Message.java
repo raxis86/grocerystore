@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * Created by raxis on 27.12.2016.
+ * Для хранения сообщений об операциях
  */
 public class Message {
     private static final Logger logger = LoggerFactory.getLogger(Message.class);

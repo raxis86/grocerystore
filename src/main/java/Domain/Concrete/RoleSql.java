@@ -18,6 +18,7 @@ import static Constants.Constants.*;
 
 /**
  * Created by raxis on 27.12.2016.
+ * Реализакция DAO для работы с role в MySQL
  */
 public class RoleSql implements IRepositoryRole {
     private static final Logger logger = LoggerFactory.getLogger(RoleSql.class);
@@ -35,6 +36,7 @@ public class RoleSql implements IRepositoryRole {
             }
 
         } catch (SQLException e) {
+            logger.error("cant getAll",e);
             e.printStackTrace();
         }
         return roleList;
@@ -53,7 +55,7 @@ public class RoleSql implements IRepositoryRole {
 
             }
         } catch (SQLException e) {
-            logger.error("Cant getOne Grocery!", e);
+            logger.error("Cant getOne Role!", e);
             e.printStackTrace();
         }
         return role;
@@ -66,6 +68,7 @@ public class RoleSql implements IRepositoryRole {
             statement.setObject(2,entity.getName());
             statement.execute();
         } catch (SQLException e) {
+            logger.error("cant create",e);
             e.printStackTrace();
             return false;
         }
@@ -78,6 +81,7 @@ public class RoleSql implements IRepositoryRole {
             statement.setObject(1,id.toString());
             statement.execute();
         } catch (SQLException e) {
+            logger.error("cant delete",e);
             e.printStackTrace();
             return false;
         }
@@ -91,6 +95,7 @@ public class RoleSql implements IRepositoryRole {
             statement.setObject(2,entity.getId().toString());
             statement.executeUpdate();
         } catch (SQLException e) {
+            logger.error("cant update",e);
             e.printStackTrace();
             return false;
         }

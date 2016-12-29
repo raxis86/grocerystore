@@ -4,6 +4,7 @@ import java.util.List;
 
 /**
  * Created by raxis on 27.12.2016.
+ * DAO
  */
 public interface IRepository<T,K> {
     public List<T> getAll();

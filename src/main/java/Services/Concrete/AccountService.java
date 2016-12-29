@@ -19,6 +19,7 @@ import java.util.UUID;
 
 /**
  * Created by raxis on 29.12.2016.
+ * Сервис для регистрации и аутентификации пользователя
  */
 public class AccountService implements IAccountService {
     private static final Logger logger = LoggerFactory.getLogger(AccountService.class);
@@ -31,6 +32,12 @@ public class AccountService implements IAccountService {
         this.roleHandler=new RoleSql();
     }
 
+    /**
+     * Метод для аутентификации пользователя
+     * @param email
+     * @param password
+     * @return
+     */
     @Override
     public AuthUser logIn(String email, String password) {
         //Ищем, что существует юзер с таким email
@@ -49,6 +56,12 @@ public class AccountService implements IAccountService {
         else {return new AuthUser(new Message("Неверный пароль", Message.Status.ERROR));}
     }
 
+    /**
+     * Метод для регистрации пользователя
+     * @param user
+     * @return
+     * @throws NoSavedInDbException
+     */
     @Override
     public AuthUser signIn(User user) throws NoSavedInDbException {
         Role role=null;

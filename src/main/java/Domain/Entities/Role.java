@@ -8,12 +8,13 @@ import java.util.UUID;
 
 /**
  * Created by raxis on 27.12.2016.
+ * Роль пользователя
  */
 public class Role implements Serializable {
     private static final Logger logger = LoggerFactory.getLogger(Role.class);
 
-    private UUID id;
-    private String name;
+    private UUID id;        //первичный ключ
+    private String name;    //наименование
 
     public UUID getId() {
         return id;

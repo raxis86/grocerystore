@@ -18,6 +18,7 @@ import java.util.UUID;
 
 /**
  * Created by raxis on 29.12.2016.
+ * Работа с продуктами
  */
 public class GroceryService implements IGroceryService {
     private static final Logger logger = LoggerFactory.getLogger(GroceryService.class);

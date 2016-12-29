@@ -15,6 +15,7 @@ import java.util.Map;
 
 /**
  * Created by raxis on 29.12.2016.
+ * Работа со списком продуктов в заказе
  */
 public class GroceryListService implements IGroceryListService {
     private static final Logger logger = LoggerFactory.getLogger(GroceryListService.class);
@@ -26,6 +27,12 @@ public class GroceryListService implements IGroceryListService {
     }
 
 
+    /**
+     * Создание списка продуктов соответствующих заказу
+     * @param cart
+     * @param order
+     * @throws NoSavedInDbException
+     */
     @Override
     public void createGroceryList(Cart cart, Order order) throws NoSavedInDbException {
         for(Map.Entry entry : cart.getMap().entrySet()){

@@ -19,7 +19,7 @@ import static Constants.Constants.*;
 /**
  * Created by raxis on 27.12.2016.
  */
-public class UserSql implements IRepositoryUser<User,UUID> {
+public class UserSql implements IRepositoryUser {
     private static final Logger logger = LoggerFactory.getLogger(UserSql.class);
 
 

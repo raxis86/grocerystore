@@ -19,7 +19,7 @@ import static Constants.Constants.*;
 /**
  * Created by raxis on 27.12.2016.
  */
-public class OrderSql implements IRepositoryOrder<Order,UUID> {
+public class OrderSql implements IRepositoryOrder {
     private static final Logger logger = LoggerFactory.getLogger(OrderSql.class);
 
     private void fillOrder(Order order, ResultSet resultSet) throws SQLException {

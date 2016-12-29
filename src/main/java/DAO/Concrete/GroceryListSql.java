@@ -19,7 +19,7 @@ import static Constants.Constants.*;
 /**
  * Created by raxis on 27.12.2016.
  */
-public class GroceryListSql implements IRepositoryGroceryList<GroceryList,UUID> {
+public class GroceryListSql implements IRepositoryGroceryList {
     private static final Logger logger = LoggerFactory.getLogger(GroceryListSql.class);
 
     private void fillGroceryList(GroceryList groceryList, ResultSet resultSet) throws SQLException {

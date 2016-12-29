@@ -19,7 +19,7 @@ import static Constants.Constants.*;
 /**
  * Created by raxis on 27.12.2016.
  */
-public class RoleSql implements IRepositoryRole<Role,UUID> {
+public class RoleSql implements IRepositoryRole {
     private static final Logger logger = LoggerFactory.getLogger(RoleSql.class);
 
     @Override

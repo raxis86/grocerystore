@@ -55,7 +55,7 @@ public class OrderService {
         Map<String,Integer> map = new HashMap<>();
         Map<String,String> statusMap = new HashMap<>();
 
-        Order order = (Order) orderHandler.getOne(orderid);
+        Order order = orderHandler.getOne(orderid);
         List<GroceryList> groceryLists = groceryListHandler.getListById(order.getGrocerylistid());
         OrderStatus orderStatus = (OrderStatus) orderStatusHandler.getOne(order.getOrderstatusid());
         List<OrderStatus> orderStatusList = orderStatusHandler.getAll();

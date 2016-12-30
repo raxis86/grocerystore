@@ -2,14 +2,13 @@ package Domain.Concrete;
 
 import Domain.Abstract.IRepositoryOrderStatus;
 import Domain.Entities.OrderStatus;
+import Tools.DatabaseManager;
 import Tools.Tool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import javax.xml.crypto.Data;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -26,15 +25,15 @@ public class OrderStatusSql implements IRepositoryOrderStatus {
     @Override
     public List<OrderStatus> getAll() {
         List<OrderStatus> orderStatusList = new ArrayList<>();
-        try(Statement statement = Tool.getConnection().createStatement();) {
-            ResultSet resultSet=statement.executeQuery(ORDERSTATUS_SELECTALL_QUERY);
+        try(Connection connection = DatabaseManager.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet=statement.executeQuery(ORDERSTATUS_SELECTALL_QUERY);) {
             while (resultSet.next()){
                 OrderStatus orderStatus = new OrderStatus();
                 orderStatus.setId(UUID.fromString(resultSet.getString("ID")));
                 orderStatus.setStatus(resultSet.getString("STATUS"));
                 orderStatusList.add(orderStatus);
             }
-
         } catch (SQLException e) {
             logger.error("cant gelAll",e);
             e.printStackTrace();
@@ -45,7 +44,8 @@ public class OrderStatusSql implements IRepositoryOrderStatus {
     @Override
     public OrderStatus getOne(UUID id) {
         OrderStatus orderStatus = null;
-        try(PreparedStatement statement = Tool.getConnection().prepareStatement(ORDERSTATUS_PREP_SELECTONE_QUERY)) {
+        try(Connection connection = DatabaseManager.getConnection();
+            PreparedStatement statement = connection.prepareStatement(ORDERSTATUS_PREP_SELECTONE_QUERY)) {
             statement.setObject(1,id.toString());
             ResultSet resultSet = statement.executeQuery();
             if(resultSet.next()){
@@ -53,6 +53,7 @@ public class OrderStatusSql implements IRepositoryOrderStatus {
                 orderStatus.setId(UUID.fromString(resultSet.getString("ID")));
                 orderStatus.setStatus(resultSet.getString("STATUS"));
             }
+            resultSet.close();
         } catch (SQLException e) {
             logger.error("Cant getOne OrderStatusSql!", e);
             e.printStackTrace();
@@ -62,7 +63,8 @@ public class OrderStatusSql implements IRepositoryOrderStatus {
 
     @Override
     public boolean create(OrderStatus entity) {
-        try(PreparedStatement statement = Tool.getConnection().prepareStatement(ORDERSTATUS_PREP_INSERT_QUERY);) {
+        try(Connection connection = DatabaseManager.getConnection();
+            PreparedStatement statement = connection.prepareStatement(ORDERSTATUS_PREP_INSERT_QUERY);) {
             statement.setObject(1,entity.getId().toString());
             statement.setObject(2,entity.getStatus());
             statement.execute();
@@ -76,7 +78,8 @@ public class OrderStatusSql implements IRepositoryOrderStatus {
 
     @Override
     public boolean delete(UUID id) {
-        try(PreparedStatement statement = Tool.getConnection().prepareStatement(ORDERSTATUS_PREP_DELETE_QUERY);) {
+        try(Connection connection = DatabaseManager.getConnection();
+            PreparedStatement statement = connection.prepareStatement(ORDERSTATUS_PREP_DELETE_QUERY);) {
             statement.setObject(1,id.toString());
             statement.execute();
         } catch (SQLException e) {
@@ -89,7 +92,8 @@ public class OrderStatusSql implements IRepositoryOrderStatus {
 
     @Override
     public boolean update(OrderStatus entity) {
-        try(PreparedStatement statement=Tool.getConnection().prepareStatement(ORDERSTATUS_PREP_UPDATE_QUERY);) {
+        try(Connection connection = DatabaseManager.getConnection();
+            PreparedStatement statement=connection.prepareStatement(ORDERSTATUS_PREP_UPDATE_QUERY);) {
             statement.setObject(1,entity.getStatus());
             statement.setObject(2,entity.getId().toString());
             statement.executeUpdate();

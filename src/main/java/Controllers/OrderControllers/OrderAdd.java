@@ -1,12 +1,10 @@
 package Controllers.OrderControllers;
 
 import Domain.Entities.User;
-import Services.Abstract.ICartService;
-import Services.Abstract.IGroceryListService;
+import Services.Abstract.IListGroceryService;
 import Services.Abstract.IOrderService;
 import Services.Abstract.IUserService;
-import Services.Concrete.CartService;
-import Services.Concrete.GroceryListService;
+import Services.Concrete.ListGroceryService;
 import Services.Concrete.OrderService;
 import Services.Concrete.UserService;
 import Services.Exceptions.NoSavedInDbException;
@@ -21,10 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 /**
  * Created by raxis on 26.12.2016.
@@ -58,7 +52,7 @@ public class OrderAdd extends HttpServlet{
         req.setCharacterEncoding("UTF-8");
 
         IOrderService orderService = new OrderService();
-        IGroceryListService groceryListService = new GroceryListService();
+        IListGroceryService listGroceryService = new ListGroceryService();
         IUserService userService = new UserService();
 
         HttpSession session = req.getSession();
@@ -74,7 +68,7 @@ public class OrderAdd extends HttpServlet{
                         req.getParameter("address"),
                         req.getParameter("phone"));
 
-                groceryListService.createGroceryList(cart,orderService.createOrder(user,cart));
+                listGroceryService.createListGrocery(cart,orderService.createOrder(user,cart));
 
                 cart.clear();
 

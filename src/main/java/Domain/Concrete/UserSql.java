@@ -2,14 +2,12 @@ package Domain.Concrete;
 
 import Domain.Abstract.IRepositoryUser;
 import Domain.Entities.User;
+import Tools.DatabaseManager;
 import Tools.Tool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -40,14 +38,14 @@ public class UserSql implements IRepositoryUser {
     @Override
     public List<User> getAll() {
         List<User> userList = new ArrayList<>();
-        try(Statement statement = Tool.getConnection().createStatement();) {
-            ResultSet resultSet=statement.executeQuery(USER_SELECTALL_QUERY);
+        try(Connection connection = DatabaseManager.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet=statement.executeQuery(USER_SELECTALL_QUERY);) {
             while (resultSet.next()){
                 User usr = new User();
                 fillUser(usr,resultSet);
                 userList.add(usr);
             }
-
         } catch (SQLException e) {
             logger.error("Select Users error!",e);
             e.printStackTrace();
@@ -58,13 +56,15 @@ public class UserSql implements IRepositoryUser {
     @Override
     public User getOne(UUID id) {
         User usr = null;
-        try(PreparedStatement statement = Tool.getConnection().prepareStatement(USER_PREP_SELECTONE_QUERY);) {
+        try(Connection connection = DatabaseManager.getConnection();
+            PreparedStatement statement = connection.prepareStatement(USER_PREP_SELECTONE_QUERY);) {
             statement.setObject(1,id.toString());
             ResultSet resultSet = statement.executeQuery();
             if(resultSet.next()){
                 usr = new User();
                 fillUser(usr,resultSet);
             }
+            resultSet.close();
         } catch (SQLException e) {
             logger.error("Cant getOne User!",e);
             e.printStackTrace();
@@ -74,7 +74,8 @@ public class UserSql implements IRepositoryUser {
 
     @Override
     public boolean create(User entity) {
-        try(PreparedStatement statement = Tool.getConnection().prepareStatement(USER_PREP_INSERT_QUERY);) {
+        try(Connection connection = DatabaseManager.getConnection();
+            PreparedStatement statement = connection.prepareStatement(USER_PREP_INSERT_QUERY);) {
             statement.setObject(1,entity.getId().toString());
             statement.setObject(2,entity.getRoleID().toString());
             statement.setObject(3,entity.getName());
@@ -96,7 +97,8 @@ public class UserSql implements IRepositoryUser {
 
     @Override
     public boolean delete(UUID id) {
-        try(PreparedStatement statement = Tool.getConnection().prepareStatement(USER_PREP_DELETE_QUERY);) {
+        try(Connection connection = DatabaseManager.getConnection();
+            PreparedStatement statement = connection.prepareStatement(USER_PREP_DELETE_QUERY);) {
             statement.setObject(1,id.toString());
             statement.execute();
         } catch (SQLException e) {
@@ -109,7 +111,8 @@ public class UserSql implements IRepositoryUser {
 
     @Override
     public boolean update(User entity) {
-        try(PreparedStatement statement=Tool.getConnection().prepareStatement(USER_PREP_UPDATE_QUERY);) {
+        try(Connection connection = DatabaseManager.getConnection();
+            PreparedStatement statement=connection.prepareStatement(USER_PREP_UPDATE_QUERY);) {
             statement.setObject(1,entity.getRoleID().toString());
             statement.setObject(2,entity.getName());
             statement.setObject(3,entity.getEmail());
@@ -132,7 +135,8 @@ public class UserSql implements IRepositoryUser {
     @Override
     public User getOne(String email, String passwordHash) {
         User usr = null;
-        try(PreparedStatement statement = Tool.getConnection().prepareStatement(USER_PREP_SELECTONE_BY_AUTH_QUERY)) {
+        try(Connection connection = DatabaseManager.getConnection();
+            PreparedStatement statement = connection.prepareStatement(USER_PREP_SELECTONE_BY_AUTH_QUERY)) {
             statement.setObject(1,email);
             statement.setObject(2,passwordHash);
             ResultSet resultSet = statement.executeQuery();
@@ -140,6 +144,7 @@ public class UserSql implements IRepositoryUser {
                 usr = new User();
                 fillUser(usr,resultSet);
             }
+            resultSet.close();
         } catch (SQLException e) {
             logger.error("Cant getOne User by auth info",e);
             e.printStackTrace();
@@ -150,13 +155,15 @@ public class UserSql implements IRepositoryUser {
     @Override
     public User getOneByEmail(String email) {
         User usr = null;
-        try(PreparedStatement statement = Tool.getConnection().prepareStatement(USER_PREP_SELECTONE_BY_EMAIL_QUERY)) {
+        try(Connection connection = DatabaseManager.getConnection();
+            PreparedStatement statement = connection.prepareStatement(USER_PREP_SELECTONE_BY_EMAIL_QUERY)) {
             statement.setObject(1,email);
             ResultSet resultSet = statement.executeQuery();
             if(resultSet.next()){
                 usr = new User();
                 fillUser(usr,resultSet);
             }
+            resultSet.close();
         } catch (SQLException e) {
             logger.error("Cant getOne User by auth info",e);
             e.printStackTrace();

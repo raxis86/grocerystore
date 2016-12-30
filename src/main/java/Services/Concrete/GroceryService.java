@@ -1,11 +1,11 @@
 package Services.Concrete;
 
 import Domain.Abstract.IRepositoryGrocery;
-import Domain.Abstract.IRepositoryGroceryList;
-import Domain.Concrete.GroceryListSql;
+import Domain.Abstract.IRepositoryListGrocery;
+import Domain.Concrete.ListGrocerySql;
 import Domain.Concrete.GrocerySql;
 import Domain.Entities.Grocery;
-import Domain.Entities.GroceryList;
+import Domain.Entities.ListGrocery;
 import Services.Abstract.IGroceryService;
 import Services.Exceptions.NoSavedInDbException;
 import Services.Models.Message;
@@ -24,11 +24,11 @@ public class GroceryService implements IGroceryService {
     private static final Logger logger = LoggerFactory.getLogger(GroceryService.class);
 
     private IRepositoryGrocery groceryHandler;
-    private IRepositoryGroceryList groceryListHandler;
+    private IRepositoryListGrocery listGroceryHandler;
 
     public GroceryService(){
         this.groceryHandler = new GrocerySql();
-        this.groceryListHandler = new GroceryListSql();
+        this.listGroceryHandler = new ListGrocerySql();
     }
 
 
@@ -61,14 +61,14 @@ public class GroceryService implements IGroceryService {
     @Override
     public void groceryDelete(String groceryid) throws NoSavedInDbException {
         Grocery grocery = groceryHandler.getOne(UUID.fromString(groceryid));
-        List<GroceryList> groceryLists = groceryListHandler.getListByGroceryId(grocery.getId());
+        List<ListGrocery> listGroceries = listGroceryHandler.getListByGroceryId(grocery.getId());
 
         if(!groceryHandler.delete(grocery.getId())){
             throw new NoSavedInDbException();
         }
 
-        for(GroceryList gl : groceryLists){
-            groceryListHandler.delete(gl.getId());
+        for(ListGrocery gl : listGroceries){
+            listGroceryHandler.delete(gl.getId());
         }
     }
 

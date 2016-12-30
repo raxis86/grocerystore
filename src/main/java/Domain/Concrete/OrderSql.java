@@ -2,14 +2,12 @@ package Domain.Concrete;
 
 import Domain.Abstract.IRepositoryOrder;
 import Domain.Entities.Order;
+import Tools.DatabaseManager;
 import Tools.Tool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -36,14 +34,14 @@ public class OrderSql implements IRepositoryOrder {
     @Override
     public List<Order> getAll() {
         List<Order> orderList = new ArrayList<>();
-        try(Statement statement = Tool.getConnection().createStatement();) {
-            ResultSet resultSet=statement.executeQuery(ORDER_SELECTALL_QUERY);
+        try(Connection connection = DatabaseManager.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet=statement.executeQuery(ORDER_SELECTALL_QUERY);) {
             while (resultSet.next()){
                 Order order = new Order();
                 fillOrder(order,resultSet);
                 orderList.add(order);
             }
-
         } catch (SQLException e) {
             logger.error("cant getAll",e);
             e.printStackTrace();
@@ -54,13 +52,15 @@ public class OrderSql implements IRepositoryOrder {
     @Override
     public Order getOne(UUID id) {
         Order order = null;
-        try(PreparedStatement statement = Tool.getConnection().prepareStatement(ORDER_PREP_SELECTONE_QUERY)) {
+        try(Connection connection = DatabaseManager.getConnection();
+            PreparedStatement statement = connection.prepareStatement(ORDER_PREP_SELECTONE_QUERY)) {
             statement.setObject(1,id.toString());
             ResultSet resultSet = statement.executeQuery();
             if(resultSet.next()){
                 order = new Order();
                 fillOrder(order,resultSet);
             }
+            resultSet.close();
         } catch (SQLException e) {
             logger.error("Cant getOne Order!", e);
             e.printStackTrace();
@@ -70,7 +70,8 @@ public class OrderSql implements IRepositoryOrder {
 
     @Override
     public boolean create(Order entity) {
-        try(PreparedStatement statement = Tool.getConnection().prepareStatement(ORDER_PREP_INSERT_QUERY);) {
+        try(Connection connection = DatabaseManager.getConnection();
+            PreparedStatement statement = connection.prepareStatement(ORDER_PREP_INSERT_QUERY);) {
             statement.setObject(1,entity.getId().toString());
             statement.setObject(2,entity.getUserid().toString());
             statement.setObject(3,entity.getOrderstatusid().toString());
@@ -89,7 +90,8 @@ public class OrderSql implements IRepositoryOrder {
 
     @Override
     public boolean delete(UUID id) {
-        try(PreparedStatement statement = Tool.getConnection().prepareStatement(ORDER_PREP_DELETE_QUERY);) {
+        try(Connection connection = DatabaseManager.getConnection();
+            PreparedStatement statement = connection.prepareStatement(ORDER_PREP_DELETE_QUERY);) {
             statement.setObject(1,id.toString());
             statement.execute();
         } catch (SQLException e) {
@@ -102,7 +104,8 @@ public class OrderSql implements IRepositoryOrder {
 
     @Override
     public boolean update(Order entity) {
-        try(PreparedStatement statement=Tool.getConnection().prepareStatement(ORDER_PREP_UPDATE_QUERY);) {
+        try(Connection connection = DatabaseManager.getConnection();
+            PreparedStatement statement=connection.prepareStatement(ORDER_PREP_UPDATE_QUERY);) {
             statement.setObject(1,entity.getUserid().toString());
             statement.setObject(2,entity.getOrderstatusid().toString());
             statement.setObject(3,entity.getPrice());
@@ -122,7 +125,8 @@ public class OrderSql implements IRepositoryOrder {
     @Override
     public List<Order> getByUserId(UUID userid) {
         List<Order> orderList = new ArrayList<>();
-        try(PreparedStatement statement = Tool.getConnection().prepareStatement(ORDER_PREP_SELECT_BY_USERID_QUERY);) {
+        try(Connection connection = DatabaseManager.getConnection();
+            PreparedStatement statement = connection.prepareStatement(ORDER_PREP_SELECT_BY_USERID_QUERY);) {
             statement.setObject(1,userid.toString());
             ResultSet resultSet=statement.executeQuery();
             while (resultSet.next()){
@@ -130,7 +134,7 @@ public class OrderSql implements IRepositoryOrder {
                 fillOrder(order,resultSet);
                 orderList.add(order);
             }
-
+            resultSet.close();
         } catch (SQLException e) {
             logger.error("cant getByUserId",e);
             e.printStackTrace();

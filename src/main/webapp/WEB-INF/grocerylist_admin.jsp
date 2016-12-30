@@ -71,16 +71,5 @@
   </c:forEach>
 </Table>
 
-<%--<c:forEach items="${groceryList}" var="item">
-  ${item}<br>
-</c:forEach>--%>
-
-<%-- <c:forEach items="${groceryList}" var="item">
-   ${item.getPrice()}<br>
- </c:forEach>--%>
-
-<%--<%for(Grocery g : (List<Grocery>)request.getAttribute("grocerylist")){%>
-  <%=g.getName()%>
-<%}%>
-</body>--%>
+</body>
 </html>

@@ -7,6 +7,6 @@ import Services.Models.Cart;
 /**
  * Created by raxis on 29.12.2016.
  */
-public interface IGroceryListService {
-    public void createGroceryList(Cart cart, Order order) throws NoSavedInDbException;
+public interface IListGroceryService {
+    public void createListGrocery(Cart cart, Order order) throws NoSavedInDbException;
 }

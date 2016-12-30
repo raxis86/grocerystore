@@ -20,14 +20,14 @@ public class OrderService implements IOrderService {
 
     private IRepositoryOrder orderHandler;
     private IRepositoryOrderStatus orderStatusHandler;
-    private IRepositoryGroceryList groceryListHandler;
+    private IRepositoryListGrocery listGroceryHandler;
     private IRepositoryGrocery groceryHandler;
     private IRepositoryUser userHandler;
 
     public OrderService(){
         this.orderHandler = new OrderSql();
         this.orderStatusHandler = new OrderStatusSql();
-        this.groceryListHandler = new GroceryListSql();
+        this.listGroceryHandler = new ListGrocerySql();
         this.groceryHandler = new GrocerySql();
         this.userHandler = new UserSql();
     }
@@ -118,7 +118,7 @@ public class OrderService implements IOrderService {
         Map<String,String> statusMap = new HashMap<>();
 
         Order order = orderHandler.getOne(orderid);
-        List<GroceryList> groceryLists = groceryListHandler.getListById(order.getGrocerylistid());
+        List<ListGrocery> listGroceries = listGroceryHandler.getListById(order.getGrocerylistid());
         OrderStatus orderStatus = orderStatusHandler.getOne(order.getOrderstatusid());
         List<OrderStatus> orderStatusList = orderStatusHandler.getAll();
 
@@ -131,7 +131,7 @@ public class OrderService implements IOrderService {
         orderView.setFullName(userName);
         orderView.setPrice(order.getPrice().toString());
 
-        for(GroceryList list:groceryLists){
+        for(ListGrocery list: listGroceries){
             String str=groceryHandler.getOne(list.getGroceryId()).getName();
             map.put(str,Integer.valueOf(list.getQuantity()));
         }

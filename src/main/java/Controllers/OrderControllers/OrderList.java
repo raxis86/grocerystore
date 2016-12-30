@@ -4,7 +4,6 @@ import Domain.Entities.User;
 import Services.Abstract.IOrderService;
 import Services.Concrete.OrderService;
 import Services.Exceptions.NoSavedInDbException;
-import Services.ViewModels.OrderView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.*;
 
 /**
  * Created by raxis on 26.12.2016.
@@ -54,14 +52,15 @@ public class OrderList extends HttpServlet {
 
         try {
             orderService.updateOrder(req.getParameter("orderid"));
-            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/grocerylist.jsp");
-            rd.forward(req,resp);
+            doGet(req,resp);
+            /*RequestDispatcher rd = req.getRequestDispatcher("/OrderList");
+            rd.forward(req,resp);*/
         } catch (NoSavedInDbException e) {
             RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/savetodberror.jsp");
             rd.forward(req,resp);
         }
 
-        RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/grocerylist.jsp");
+        RequestDispatcher rd = req.getRequestDispatcher("/GroceryListController");
         rd.forward(req,resp);
     }
 }

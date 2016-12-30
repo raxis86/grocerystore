@@ -10,8 +10,8 @@ import java.util.UUID;
  * Created by raxis on 27.12.2016.
  * для таблицы заказанных продуктов
  */
-public class GroceryList implements Serializable {
-    private static final Logger logger = LoggerFactory.getLogger(GroceryList.class);
+public class ListGrocery implements Serializable {
+    private static final Logger logger = LoggerFactory.getLogger(ListGrocery.class);
 
     private UUID id;        //ключ
     private UUID groceryId; //ключ продукта

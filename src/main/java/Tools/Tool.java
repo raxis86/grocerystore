@@ -10,9 +10,7 @@ import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 import java.util.Properties;
 import java.util.Random;
@@ -106,6 +104,19 @@ public class Tool {
     }
 
     public static void main(String[] args) {
+        /*DatabaseManager databaseManager = new DatabaseManager();
+
+        try {
+            Statement statement = databaseManager.getConnection().createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM USERS");
+            while (resultSet.next()){
+                System.out.println(resultSet.getString(2));
+            }
+        } catch (NamingException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }*/
         /*String salt = Tool.generateSalt();
         String pwd = Tool.computeHash(Tool.computeHash("1qaz2wsx") + salt);
         System.out.println(salt);

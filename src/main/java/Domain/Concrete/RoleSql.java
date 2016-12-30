@@ -101,4 +101,23 @@ public class RoleSql implements IRepositoryRole {
         }
         return true;
     }
+
+    @Override
+    public Role roleByRoleName(String roleName) {
+        Role role = null;
+        try(PreparedStatement statement = Tool.getConnection().prepareStatement(ROLE_PREP_SELECTONE_BY_NAME_QUERY)) {
+            statement.setObject(1,roleName);
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.next()){
+                role = new Role();
+                role.setId(UUID.fromString(resultSet.getString("ID")));
+                role.setName(resultSet.getString("NAME"));
+
+            }
+        } catch (SQLException e) {
+            logger.error("Cant getOne Role!", e);
+            e.printStackTrace();
+        }
+        return role;
+    }
 }

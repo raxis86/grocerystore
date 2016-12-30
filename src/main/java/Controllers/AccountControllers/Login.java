@@ -1,7 +1,10 @@
 package Controllers.AccountControllers;
 
 import Services.Abstract.IAccountService;
+import Services.Abstract.IUserService;
 import Services.Concrete.AccountService;
+import Services.Concrete.UserService;
+import Services.Exceptions.FormUserException;
 import Services.Models.AuthUser;
 import Services.Models.Message;
 import org.slf4j.Logger;
@@ -32,19 +35,24 @@ public class Login extends HttpServlet{
         req.setCharacterEncoding("UTF-8");
 
         IAccountService accountService = new AccountService();
+        IUserService userService = new UserService();
 
-        AuthUser authUser = accountService.logIn(req.getParameter("email"),req.getParameter("password"));
+        AuthUser authUser=null;
 
-        if(authUser.getMessage().isOk()){
+        try {
+            authUser=accountService.logIn(userService.formUserFromRepo(req.getParameter("email"),
+                                                                       req.getParameter("password")));
+        } catch (FormUserException e) {
+            req.setAttribute("messages",e.getExceptionMessage().getMessagesError());
+            doGet(req,resp);
+        }
+
+        if(authUser!=null){
             HttpSession session = req.getSession(true);
             session.setAttribute("user",authUser.getUser());
             session.setAttribute("role",authUser.getRole());
             RequestDispatcher rd=req.getRequestDispatcher("/index.jsp");
             rd.forward(req,resp);
-        }
-        else {
-            req.setAttribute("messages",authUser.getMessage().getMessagesError());
-            doGet(req,resp);
         }
 
     }

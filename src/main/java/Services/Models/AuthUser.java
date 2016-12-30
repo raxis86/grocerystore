@@ -7,36 +7,17 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Created by raxis on 29.12.2016.
- * Класс для хранения пользователя, роли
- * и сообщений об операции с ними
+ * Класс для хранения пользователя и роли
  */
 public class AuthUser {
     private static final Logger logger = LoggerFactory.getLogger(AuthUser.class);
 
     private User user;
     private Role role;
-    private Message message;
-
-    public AuthUser(){
-
-    }
-
-    public AuthUser(User user, Role role, Message message){
-        this.user=user;
-        this.role=role;
-        this.message=message;
-    }
 
     public AuthUser(User user, Role role){
         this.user=user;
         this.role=role;
-        message = new Message("OK", Message.Status.OK);
-    }
-
-    public AuthUser(Message message){
-        this.message=message;
-        this.user=null;
-        this.role=null;
     }
 
     public User getUser() {
@@ -55,11 +36,4 @@ public class AuthUser {
         this.role = role;
     }
 
-    public Message getMessage() {
-        return message;
-    }
-
-    public void setMessage(Message message) {
-        this.message = message;
-    }
 }

@@ -9,6 +9,6 @@ import Services.Models.AuthUser;
  * Created by raxis on 29.12.2016.
  */
 public interface IAccountService {
-    public AuthUser logIn(String email, String password);
+    public AuthUser logIn(User user);
     public AuthUser signIn(User user) throws NoSavedInDbException;
 }

@@ -4,6 +4,7 @@ import Services.Abstract.IAccountService;
 import Services.Abstract.IUserService;
 import Services.Concrete.AccountService;
 import Services.Concrete.UserService;
+import Services.Exceptions.FormUserException;
 import Services.Exceptions.NoSavedInDbException;
 import Services.Models.AuthUser;
 import org.slf4j.Logger;
@@ -41,7 +42,7 @@ public class Signin extends HttpServlet {
         IAccountService accountService = new AccountService();
         IUserService userService = new UserService();
 
-        AuthUser authUser=new AuthUser();
+        AuthUser authUser=null;
         try {
             authUser = accountService.signIn(userService.formUser(req.getParameter("email"),
                                                                   req.getParameter("password"),
@@ -49,19 +50,19 @@ public class Signin extends HttpServlet {
                                                                   req.getParameter("lastname"),
                                                                   req.getParameter("surname"),
                                                                   req.getParameter("address"),
-                                                                  req.getParameter("phone")));
+                                                                  req.getParameter("phone"),
+                                                                  "user"));
         } catch (NoSavedInDbException e) {
             RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/savetodberror.jsp");
             rd.forward(req,resp);
+        } catch (FormUserException e) {
+            req.setAttribute("messages",e.getExceptionMessage().getMessagesError());
+            doGet(req,resp);
         }
 
-        if(authUser.getMessage().isOk()){
+        if(authUser!=null){
             RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/signinsuccess.jsp");
             rd.forward(req,resp);
-        }
-        else {
-            req.setAttribute("messages",authUser.getMessage().getMessagesError());
-            doGet(req,resp);
         }
     }
 }

@@ -21,6 +21,7 @@ public class Constants {
     public static final String USER_PREP_DELETE_QUERY="DELETE FROM users WHERE ID=?";
     public static final String ROLE_SELECTALL_QUERY="SELECT * FROM roles";
     public static final String ROLE_PREP_SELECTONE_QUERY="SELECT * FROM roles WHERE ID=?";
+    public static final String ROLE_PREP_SELECTONE_BY_NAME_QUERY="SELECT * FROM roles WHERE NAME=?";
     public static final String ROLE_PREP_INSERT_QUERY="INSERT INTO roles values (?,?)";
     public static final String ROLE_PREP_UPDATE_QUERY="UPDATE roles SET NAME=? WHERE ID=?";
     public static final String ROLE_PREP_DELETE_QUERY="DELETE FROM roles WHERE ID=?";

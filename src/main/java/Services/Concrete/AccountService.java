@@ -34,26 +34,13 @@ public class AccountService implements IAccountService {
 
     /**
      * Метод для аутентификации пользователя
-     * @param email
-     * @param password
+     * @param user
      * @return
      */
     @Override
-    public AuthUser logIn(String email, String password) {
-        //Ищем, что существует юзер с таким email
-        User userByEmail = userHandler.getOneByEmail(email.toLowerCase());
-
-        if(userByEmail==null){
-            return new AuthUser(new Message("Пользователь с таким email не найден!", Message.Status.ERROR));
-        }
-
-        User user = userHandler.getOne(email.toLowerCase(), Tool.computeHash(Tool.computeHash(password) + userByEmail.getSalt()));
-
-        if(user!=null){
-            Role role = (Role) roleHandler.getOne(user.getRoleID());
-             return new AuthUser(user,role);
-        }
-        else {return new AuthUser(new Message("Неверный пароль", Message.Status.ERROR));}
+    public AuthUser logIn(User user) {
+        Role role = roleHandler.getOne(user.getRoleID());
+        return new AuthUser(user,role);
     }
 
     /**
@@ -64,26 +51,12 @@ public class AccountService implements IAccountService {
      */
     @Override
     public AuthUser signIn(User user) throws NoSavedInDbException {
-        Role role=null;
-        if(user.getEmail().toLowerCase().matches("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$")){
-            User userByEmail = userHandler.getOneByEmail(user.getEmail().toLowerCase());
-
-
-            if(userByEmail==null){
-                if(!userHandler.create(user)){
-                    throw new NoSavedInDbException();
-                }
-                role = roleHandler.getOne(user.getRoleID());
-            }
-            else {
-                return new AuthUser(new Message("Пользователь с таким email уже существует в базе!", Message.Status.ERROR));
-            }
+        if(!userHandler.create(user)){
+            throw new NoSavedInDbException();
         }
-        else {
-            return new AuthUser(new Message("email некорректен!", Message.Status.ERROR));
-        }
+        Role role = roleHandler.getOne(user.getRoleID());
 
-        return new AuthUser(user,role,new Message("Пользователь " + user.getEmail() + " успешно зарегистрирован", Message.Status.OK));
+        return new AuthUser(user,role);
     }
 
 }

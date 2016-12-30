@@ -6,16 +6,11 @@ import Domain.Concrete.RoleSql;
 import Domain.Concrete.UserSql;
 import Domain.Entities.Role;
 import Domain.Entities.User;
+import Domain.Exceptions.DAOException;
 import Services.Abstract.IAccountService;
-import Services.Exceptions.NoSavedInDbException;
 import Services.Models.AuthUser;
-import Services.Models.Message;
-import Tools.Tool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.servlet.http.HttpSession;
-import java.util.UUID;
 
 /**
  * Created by raxis on 29.12.2016.
@@ -38,7 +33,7 @@ public class AccountService implements IAccountService {
      * @return
      */
     @Override
-    public AuthUser logIn(User user) {
+    public AuthUser logIn(User user) throws DAOException {
         Role role = roleHandler.getOne(user.getRoleID());
         return new AuthUser(user,role);
     }
@@ -47,15 +42,12 @@ public class AccountService implements IAccountService {
      * Метод для регистрации пользователя
      * @param user
      * @return
-     * @throws NoSavedInDbException
+     * @throws DAOException
      */
     @Override
-    public AuthUser signIn(User user) throws NoSavedInDbException {
-        if(!userHandler.create(user)){
-            throw new NoSavedInDbException();
-        }
+    public AuthUser signIn(User user) throws DAOException {
+        userHandler.create(user);
         Role role = roleHandler.getOne(user.getRoleID());
-
         return new AuthUser(user,role);
     }
 

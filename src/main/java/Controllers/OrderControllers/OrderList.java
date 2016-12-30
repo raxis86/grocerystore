@@ -1,9 +1,9 @@
 package Controllers.OrderControllers;
 
 import Domain.Entities.User;
+import Domain.Exceptions.DAOException;
 import Services.Abstract.IOrderService;
 import Services.Concrete.OrderService;
-import Services.Exceptions.NoSavedInDbException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,10 +32,15 @@ public class OrderList extends HttpServlet {
 
         if(user!=null){
 
-            req.setAttribute("orderlist",orderService.formOrderViewList(user));
-
-            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/orderlist.jsp");
-            rd.forward(req,resp);
+            try {
+                req.setAttribute("orderlist",orderService.formOrderViewList(user));
+                RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/orderlist.jsp");
+                rd.forward(req,resp);
+            } catch (DAOException e) {
+                req.setAttribute("message",e.getMessage());
+                RequestDispatcher rd=req.getRequestDispatcher("WEB-INF/exception.jsp");
+                rd.forward(req,resp);
+            }
 
         }
         else {
@@ -53,14 +58,12 @@ public class OrderList extends HttpServlet {
         try {
             orderService.updateOrder(req.getParameter("orderid"));
             doGet(req,resp);
-            /*RequestDispatcher rd = req.getRequestDispatcher("/OrderList");
+            /*RequestDispatcher rd = req.getRequestDispatcher("/GroceryListController");
             rd.forward(req,resp);*/
-        } catch (NoSavedInDbException e) {
-            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/savetodberror.jsp");
+        } catch (DAOException e) {
+            req.setAttribute("message",e.getMessage());
+            RequestDispatcher rd=req.getRequestDispatcher("WEB-INF/exception.jsp");
             rd.forward(req,resp);
         }
-
-        RequestDispatcher rd = req.getRequestDispatcher("/GroceryListController");
-        rd.forward(req,resp);
     }
 }

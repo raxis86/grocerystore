@@ -2,6 +2,7 @@ package Domain.Concrete;
 
 import Domain.Abstract.IRepositoryOrderStatus;
 import Domain.Entities.OrderStatus;
+import Domain.Exceptions.OrderStatusException;
 import Tools.DatabaseManager;
 import Tools.Tool;
 import org.slf4j.Logger;
@@ -23,7 +24,7 @@ public class OrderStatusSql implements IRepositoryOrderStatus {
     private static final Logger logger = LoggerFactory.getLogger(OrderStatusSql.class);
 
     @Override
-    public List<OrderStatus> getAll() {
+    public List<OrderStatus> getAll() throws OrderStatusException {
         List<OrderStatus> orderStatusList = new ArrayList<>();
         try(Connection connection = DatabaseManager.getConnection();
             Statement statement = connection.createStatement();
@@ -36,13 +37,13 @@ public class OrderStatusSql implements IRepositoryOrderStatus {
             }
         } catch (SQLException e) {
             logger.error("cant gelAll",e);
-            e.printStackTrace();
+            throw new OrderStatusException("Проблема с базой данных: невозможно получить записи из таблицы статусов!");
         }
         return orderStatusList;
     }
 
     @Override
-    public OrderStatus getOne(UUID id) {
+    public OrderStatus getOne(UUID id) throws OrderStatusException {
         OrderStatus orderStatus = null;
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement = connection.prepareStatement(ORDERSTATUS_PREP_SELECTONE_QUERY)) {
@@ -56,13 +57,13 @@ public class OrderStatusSql implements IRepositoryOrderStatus {
             resultSet.close();
         } catch (SQLException e) {
             logger.error("Cant getOne OrderStatusSql!", e);
-            e.printStackTrace();
+            throw new OrderStatusException("Проблема с базой данных: невозможно получить запись из таблицы статусов!");
         }
         return orderStatus;
     }
 
     @Override
-    public boolean create(OrderStatus entity) {
+    public boolean create(OrderStatus entity) throws OrderStatusException {
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement = connection.prepareStatement(ORDERSTATUS_PREP_INSERT_QUERY);) {
             statement.setObject(1,entity.getId().toString());
@@ -70,28 +71,26 @@ public class OrderStatusSql implements IRepositoryOrderStatus {
             statement.execute();
         } catch (SQLException e) {
             logger.error("cant create",e);
-            e.printStackTrace();
-            return false;
+            throw new OrderStatusException("Проблема с базой данных: невозможно создать запись в таблице статусов!");
         }
         return true;
     }
 
     @Override
-    public boolean delete(UUID id) {
+    public boolean delete(UUID id) throws OrderStatusException {
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement = connection.prepareStatement(ORDERSTATUS_PREP_DELETE_QUERY);) {
             statement.setObject(1,id.toString());
             statement.execute();
         } catch (SQLException e) {
             logger.error("cant delete",e);
-            e.printStackTrace();
-            return false;
+            throw new OrderStatusException("Проблема с базой данных: невозможно удалить запись в таблице статусов!");
         }
         return true;
     }
 
     @Override
-    public boolean update(OrderStatus entity) {
+    public boolean update(OrderStatus entity) throws OrderStatusException {
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement=connection.prepareStatement(ORDERSTATUS_PREP_UPDATE_QUERY);) {
             statement.setObject(1,entity.getStatus());
@@ -99,8 +98,7 @@ public class OrderStatusSql implements IRepositoryOrderStatus {
             statement.executeUpdate();
         } catch (SQLException e) {
             logger.error("cant update",e);
-            e.printStackTrace();
-            return false;
+            throw new OrderStatusException("Проблема с базой данных: невозможно изменить запись в таблице статусов!");
         }
         return true;
     }

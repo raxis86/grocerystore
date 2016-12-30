@@ -2,6 +2,7 @@ package Domain.Concrete;
 
 import Domain.Abstract.IRepositoryGrocery;
 import Domain.Entities.Grocery;
+import Domain.Exceptions.GroceryException;
 import Tools.DatabaseManager;
 import Tools.Tool;
 import org.slf4j.Logger;
@@ -23,7 +24,7 @@ public class GrocerySql implements IRepositoryGrocery {
     private static final Logger logger = LoggerFactory.getLogger(GrocerySql.class);
 
     @Override
-    public List<Grocery> getAll() {
+    public List<Grocery> getAll() throws GroceryException {
         List<Grocery> groceryList = new ArrayList<>();
         try(Connection connection = DatabaseManager.getConnection();
             Statement statement = connection.createStatement();
@@ -40,13 +41,13 @@ public class GrocerySql implements IRepositoryGrocery {
             }
         } catch (SQLException e) {
             logger.error("Cant select List of Grocery",e);
-            e.printStackTrace();
+            throw new GroceryException("Проблема с базой данных: невозможно получить записи из таблицы продуктов!");
         }
         return groceryList;
     }
 
     @Override
-    public Grocery getOne(UUID id) {
+    public Grocery getOne(UUID id) throws GroceryException {
         Grocery grocery = null;
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement = connection.prepareStatement(GROCERY_PREP_SELECTONE_QUERY);) {
@@ -64,13 +65,13 @@ public class GrocerySql implements IRepositoryGrocery {
             resultSet.close();
         } catch (SQLException e) {
             logger.error("Cant getOne Grocery!", e);
-            e.printStackTrace();
+            throw new GroceryException("Проблема с базой данных: невозможно получить запись из таблицы продуктов!");
         }
         return grocery;
     }
 
     @Override
-    public boolean create(Grocery entity) {
+    public boolean create(Grocery entity) throws GroceryException {
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement = connection.prepareStatement(GROCERY_PREP_INSERT_QUERY);) {
             statement.setObject(1,entity.getId().toString());
@@ -82,28 +83,26 @@ public class GrocerySql implements IRepositoryGrocery {
             statement.execute();
         } catch (SQLException e) {
             logger.error("cant create",e);
-            e.printStackTrace();
-            return false;
+            throw new GroceryException("Проблема с базой данных: невозможно создать запись в таблице продуктов!");
         }
         return true;
     }
 
     @Override
-    public boolean delete(UUID id) {
+    public boolean delete(UUID id) throws GroceryException {
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement = connection.prepareStatement(GROCERY_PREP_DELETE_QUERY);) {
             statement.setObject(1,id.toString());
             statement.execute();
         } catch (SQLException e) {
             logger.error("cant delete",e);
-            e.printStackTrace();
-            return false;
+            throw new GroceryException("Проблема с базой данных: невозможно удалить запись из таблицы продуктов!");
         }
         return true;
     }
 
     @Override
-    public boolean update(Grocery entity) {
+    public boolean update(Grocery entity) throws GroceryException {
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement=connection.prepareStatement(GROCERY_PREP_UPDATE_QUERY);) {
             statement.setObject(1,entity.getParentid().toString());
@@ -115,8 +114,7 @@ public class GrocerySql implements IRepositoryGrocery {
             statement.executeUpdate();
         } catch (SQLException e) {
             logger.error("cant update",e);
-            e.printStackTrace();
-            return false;
+            throw new GroceryException("Проблема с базой данных: невозможно изменить запись в таблице продуктов!");
         }
         return true;
     }

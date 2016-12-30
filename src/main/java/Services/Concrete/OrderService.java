@@ -3,8 +3,8 @@ package Services.Concrete;
 import Domain.Abstract.*;
 import Domain.Concrete.*;
 import Domain.Entities.*;
+import Domain.Exceptions.DAOException;
 import Services.Abstract.IOrderService;
-import Services.Exceptions.NoSavedInDbException;
 import Services.Models.Cart;
 import Services.ViewModels.OrderView;
 import org.slf4j.Logger;
@@ -33,7 +33,7 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public Order createOrder(User user, Cart cart) throws NoSavedInDbException {
+    public Order createOrder(User user, Cart cart) throws DAOException {
         Order order = new Order();
         order.setId(UUID.randomUUID());
         order.setUserid(user.getId());
@@ -43,9 +43,7 @@ public class OrderService implements IOrderService {
         order.setGrocerylistid(UUID.randomUUID());
         order.setAddress(user.getAddress());
 
-        if(!orderHandler.create(order)){
-            throw new NoSavedInDbException();
-        }
+        orderHandler.create(order);
 
         return order;
     }
@@ -56,12 +54,12 @@ public class OrderService implements IOrderService {
      * @return
      */
     @Override
-    public OrderView formOrderView(String orderid) {
+    public OrderView formOrderView(String orderid) throws DAOException {
         return formOrderView(UUID.fromString(orderid),"");
     }
 
     @Override
-    public List<OrderView> formOrderViewListAdmin() {
+    public List<OrderView> formOrderViewListAdmin() throws DAOException {
         List<OrderView> orderViewList = new ArrayList<>();
         List<Order> orderList=orderHandler.getAll();
 
@@ -73,7 +71,7 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public List<OrderView> formOrderViewList(User user) {
+    public List<OrderView> formOrderViewList(User user) throws DAOException {
         List<OrderView> orderViewList = new ArrayList<>();
         List<Order> orderList=orderHandler.getByUserId(user.getId());
 
@@ -87,33 +85,29 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public void updateOrder(String orderid) throws NoSavedInDbException {
+    public void updateOrder(String orderid) throws DAOException {
         Order order = orderHandler.getOne(UUID.fromString(orderid));
 
         order.setOrderstatusid(UUID.fromString("1c8d12cf-6b0a-4168-ae2a-cb416cf30da5"));
 
-        if(!orderHandler.update(order)){
-            throw new NoSavedInDbException();
-        }
+        orderHandler.update(order);
     }
 
     @Override
-    public void updateOrderAdmin(String orderid, String statusid) throws NoSavedInDbException {
+    public void updateOrderAdmin(String orderid, String statusid) throws DAOException {
         Order order = orderHandler.getOne(UUID.fromString(orderid));
 
         order.setOrderstatusid(UUID.fromString(statusid));
 
-        if(!orderHandler.update(order)){
-            throw new NoSavedInDbException();
-        }
+        orderHandler.update(order);
     }
 
     @Override
-    public Order getOrder(String orderid) {
+    public Order getOrder(String orderid) throws DAOException {
         return orderHandler.getOne(UUID.fromString(orderid));
     }
 
-    private OrderView formOrderView(UUID orderid, String userName){
+    private OrderView formOrderView(UUID orderid, String userName) throws DAOException {
         Map<String,Integer> map = new HashMap<>();
         Map<String,String> statusMap = new HashMap<>();
 

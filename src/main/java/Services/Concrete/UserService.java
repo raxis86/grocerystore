@@ -6,9 +6,11 @@ import Domain.Concrete.RoleSql;
 import Domain.Concrete.UserSql;
 import Domain.Entities.Role;
 import Domain.Entities.User;
+import Domain.Exceptions.DAOException;
+import Domain.Exceptions.RoleException;
+import Domain.Exceptions.UserException;
 import Services.Abstract.IUserService;
 import Services.Exceptions.FormUserException;
-import Services.Exceptions.NoSavedInDbException;
 import Services.Models.Message;
 import Tools.Tool;
 import org.slf4j.Logger;
@@ -33,7 +35,7 @@ public class UserService implements IUserService {
     @Override
     public User formUser(String email, String password, String name,
                          String lastname, String surname, String address,
-                         String phone, String roleName) throws FormUserException {
+                         String phone, String roleName) throws FormUserException, RoleException, UserException {
 
         Message message = new Message();
         User user = new User();
@@ -78,7 +80,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User formUserFromRepo(String email, String password) throws FormUserException {
+    public User formUserFromRepo(String email, String password) throws FormUserException, UserException {
         //Ищем, что существует юзер с таким email
         Message message = new Message();
 
@@ -99,15 +101,14 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void updateUser(User user, String name, String lastname, String surname, String address, String phone) throws NoSavedInDbException {
+    public void updateUser(User user, String name, String lastname,
+                           String surname, String address, String phone) throws DAOException {
         user.setName(name);
         user.setLastName(lastname);
         user.setSurName(surname);
         user.setAddress(address);
         user.setPhone(phone);
 
-        if(!userHandler.update(user)){
-            throw new NoSavedInDbException();
-        }
+        userHandler.update(user);
     }
 }

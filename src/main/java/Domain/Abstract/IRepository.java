@@ -1,5 +1,7 @@
 package Domain.Abstract;
 
+import Domain.Exceptions.DAOException;
+
 import java.util.List;
 
 /**
@@ -7,9 +9,9 @@ import java.util.List;
  * DAO
  */
 public interface IRepository<T,K> {
-    public List<T> getAll();
-    public T getOne(K id);
-    public boolean create(T entity);
-    public boolean delete(K id);
-    public boolean update(T entity);
+    public List<T> getAll() throws DAOException;
+    public T getOne(K id) throws DAOException;
+    public boolean create(T entity) throws DAOException;
+    public boolean delete(K id) throws DAOException;
+    public boolean update(T entity) throws DAOException;
 }

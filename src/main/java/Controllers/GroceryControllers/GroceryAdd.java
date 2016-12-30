@@ -1,8 +1,8 @@
 package Controllers.GroceryControllers;
 
+import Domain.Exceptions.DAOException;
 import Services.Abstract.IGroceryService;
 import Services.Concrete.GroceryService;
-import Services.Exceptions.NoSavedInDbException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,8 +39,9 @@ public class GroceryAdd extends HttpServlet {
                                          req.getParameter("quantity"));
             RequestDispatcher rd = req.getRequestDispatcher("/GroceryListAdmin");
             rd.forward(req,resp);
-        } catch (NoSavedInDbException e) {
-            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/savetodberror.jsp");
+        } catch (DAOException e) {
+            req.setAttribute("message",e.getMessage());
+            RequestDispatcher rd=req.getRequestDispatcher("WEB-INF/exception.jsp");
             rd.forward(req,resp);
         }
 

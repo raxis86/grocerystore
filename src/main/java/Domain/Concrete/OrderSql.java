@@ -2,6 +2,7 @@ package Domain.Concrete;
 
 import Domain.Abstract.IRepositoryOrder;
 import Domain.Entities.Order;
+import Domain.Exceptions.OrderException;
 import Tools.DatabaseManager;
 import Tools.Tool;
 import org.slf4j.Logger;
@@ -32,7 +33,7 @@ public class OrderSql implements IRepositoryOrder {
     }
 
     @Override
-    public List<Order> getAll() {
+    public List<Order> getAll() throws OrderException {
         List<Order> orderList = new ArrayList<>();
         try(Connection connection = DatabaseManager.getConnection();
             Statement statement = connection.createStatement();
@@ -44,13 +45,13 @@ public class OrderSql implements IRepositoryOrder {
             }
         } catch (SQLException e) {
             logger.error("cant getAll",e);
-            e.printStackTrace();
+            throw new OrderException("Проблема с базой данных: невозможно получить записи из таблицы заказов!");
         }
         return orderList;
     }
 
     @Override
-    public Order getOne(UUID id) {
+    public Order getOne(UUID id) throws OrderException {
         Order order = null;
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement = connection.prepareStatement(ORDER_PREP_SELECTONE_QUERY)) {
@@ -63,13 +64,13 @@ public class OrderSql implements IRepositoryOrder {
             resultSet.close();
         } catch (SQLException e) {
             logger.error("Cant getOne Order!", e);
-            e.printStackTrace();
+            throw new OrderException("Проблема с базой данных: невозможно получить запись из таблицы заказов!");
         }
         return order;
     }
 
     @Override
-    public boolean create(Order entity) {
+    public boolean create(Order entity) throws OrderException {
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement = connection.prepareStatement(ORDER_PREP_INSERT_QUERY);) {
             statement.setObject(1,entity.getId().toString());
@@ -82,28 +83,26 @@ public class OrderSql implements IRepositoryOrder {
             statement.execute();
         } catch (SQLException e) {
             logger.error("cant create",e);
-            e.printStackTrace();
-            return false;
+            throw new OrderException("Проблема с базой данных: невозможно создать запись в таблице заказов!");
         }
         return true;
     }
 
     @Override
-    public boolean delete(UUID id) {
+    public boolean delete(UUID id) throws OrderException {
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement = connection.prepareStatement(ORDER_PREP_DELETE_QUERY);) {
             statement.setObject(1,id.toString());
             statement.execute();
         } catch (SQLException e) {
             logger.error("cant delete",e);
-            e.printStackTrace();
-            return false;
+            throw new OrderException("Проблема с базой данных: невозможно удалить запись из таблицы заказов!");
         }
         return true;
     }
 
     @Override
-    public boolean update(Order entity) {
+    public boolean update(Order entity) throws OrderException {
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement=connection.prepareStatement(ORDER_PREP_UPDATE_QUERY);) {
             statement.setObject(1,entity.getUserid().toString());
@@ -116,14 +115,13 @@ public class OrderSql implements IRepositoryOrder {
             statement.executeUpdate();
         } catch (SQLException e) {
             logger.error("cant update",e);
-            e.printStackTrace();
-            return false;
+            throw new OrderException("Проблема с базой данных: невозможно изменить запись в таблице заказов!");
         }
         return true;
     }
 
     @Override
-    public List<Order> getByUserId(UUID userid) {
+    public List<Order> getByUserId(UUID userid) throws OrderException {
         List<Order> orderList = new ArrayList<>();
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement = connection.prepareStatement(ORDER_PREP_SELECT_BY_USERID_QUERY);) {
@@ -137,7 +135,7 @@ public class OrderSql implements IRepositoryOrder {
             resultSet.close();
         } catch (SQLException e) {
             logger.error("cant getByUserId",e);
-            e.printStackTrace();
+            throw new OrderException("Проблема с базой данных: невозможно получить записи из таблицы заказов!");
         }
         return orderList;
     }

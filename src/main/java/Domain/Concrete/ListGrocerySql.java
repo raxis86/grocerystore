@@ -2,6 +2,7 @@ package Domain.Concrete;
 
 import Domain.Abstract.IRepositoryListGrocery;
 import Domain.Entities.ListGrocery;
+import Domain.Exceptions.ListGroceryException;
 import Tools.DatabaseManager;
 import Tools.Tool;
 import org.slf4j.Logger;
@@ -29,7 +30,7 @@ public class ListGrocerySql implements IRepositoryListGrocery {
     }
 
     @Override
-    public List<ListGrocery> getAll() {
+    public List<ListGrocery> getAll() throws ListGroceryException {
         List<ListGrocery> listGroceries = new ArrayList<>();
         try(Connection connection = DatabaseManager.getConnection();
             Statement statement = connection.createStatement();
@@ -42,12 +43,13 @@ public class ListGrocerySql implements IRepositoryListGrocery {
 
         } catch (SQLException e) {
             logger.error("Cant getall",e);
+            throw new ListGroceryException("Проблема с базой данных: невозможно получить записи из таблицы связанных продуктов!");
         }
         return listGroceries;
     }
 
     @Override
-    public ListGrocery getOne(UUID id) {
+    public ListGrocery getOne(UUID id) throws ListGroceryException {
         ListGrocery listGrocery = null;
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement = connection.prepareStatement(GROCERYLIST_PREP_SELECTONE_QUERY)) {
@@ -60,13 +62,13 @@ public class ListGrocerySql implements IRepositoryListGrocery {
             resultSet.close();
         } catch (SQLException e) {
             logger.error("Cant getOne ListGrocery!", e);
-            e.printStackTrace();
+            throw new ListGroceryException("Проблема с базой данных: невозможно получить запись из таблицы связанных продуктов!");
         }
         return listGrocery;
     }
 
     @Override
-    public boolean create(ListGrocery entity) {
+    public boolean create(ListGrocery entity) throws ListGroceryException {
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement = connection.prepareStatement(GROCERYLIST_PREP_INSERT_QUERY);) {
             statement.setObject(1,entity.getId().toString());
@@ -75,28 +77,26 @@ public class ListGrocerySql implements IRepositoryListGrocery {
             statement.execute();
         } catch (SQLException e) {
             logger.error("cant create",e);
-            e.printStackTrace();
-            return false;
+            throw new ListGroceryException("Проблема с базой данных: невозможно создать запись в таблице связанных продуктов!");
         }
         return true;
     }
 
     @Override
-    public boolean delete(UUID id) {
+    public boolean delete(UUID id) throws ListGroceryException {
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement = connection.prepareStatement(GROCERYLIST_PREP_DELETE_QUERY);) {
             statement.setObject(1,id.toString());
             statement.execute();
         } catch (SQLException e) {
             logger.error("cant delete",e);
-            e.printStackTrace();
-            return false;
+            throw new ListGroceryException("Проблема с базой данных: невозможно удалить запись из таблицы связанных продуктов!");
         }
         return true;
     }
 
     @Override
-    public boolean update(ListGrocery entity) {
+    public boolean update(ListGrocery entity) throws ListGroceryException {
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement=connection.prepareStatement(GROCERYLIST_PREP_UPDATE_QUERY);) {
             statement.setObject(1,entity.getGroceryId().toString());
@@ -105,14 +105,13 @@ public class ListGrocerySql implements IRepositoryListGrocery {
             statement.executeUpdate();
         } catch (SQLException e) {
             logger.error("cant update",e);
-            e.printStackTrace();
-            return false;
+            throw new ListGroceryException("Проблема с базой данных: невозможно изменить запись в таблице связанных продуктов!");
         }
         return true;
     }
 
     @Override
-    public List<ListGrocery> getListById(UUID id) {
+    public List<ListGrocery> getListById(UUID id) throws ListGroceryException {
         List<ListGrocery> listGroceries = new ArrayList<>();
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement = connection.prepareStatement(GROCERYLIST_PREP_SELECTONE_QUERY);) {
@@ -126,13 +125,13 @@ public class ListGrocerySql implements IRepositoryListGrocery {
             resultSet.close();
         } catch (SQLException e) {
             logger.error("cant getListById",e);
-            e.printStackTrace();
+            throw new ListGroceryException("Проблема с базой данных: невозможно получить записи из таблицы связанных продуктов!");
         }
         return listGroceries;
     }
 
     @Override
-    public List<ListGrocery> getListByGroceryId(UUID id) {
+    public List<ListGrocery> getListByGroceryId(UUID id) throws ListGroceryException {
         List<ListGrocery> listGroceries = new ArrayList<>();
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement = connection.prepareStatement(GROCERYLIST_PREP_SELECT_BY_GROCERYID_QUERY);) {
@@ -146,7 +145,7 @@ public class ListGrocerySql implements IRepositoryListGrocery {
             resultSet.close();
         } catch (SQLException e) {
             logger.error("cant getListByGroceryId",e);
-            e.printStackTrace();
+            throw new ListGroceryException("Проблема с базой данных: невозможно получить записи из таблицы связанных продуктов!");
         }
         return listGroceries;
     }

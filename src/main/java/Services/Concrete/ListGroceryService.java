@@ -5,8 +5,8 @@ import Domain.Concrete.ListGrocerySql;
 import Domain.Entities.Grocery;
 import Domain.Entities.ListGrocery;
 import Domain.Entities.Order;
+import Domain.Exceptions.DAOException;
 import Services.Abstract.IListGroceryService;
-import Services.Exceptions.NoSavedInDbException;
 import Services.Models.Cart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,19 +31,17 @@ public class ListGroceryService implements IListGroceryService {
      * Создание списка продуктов соответствующих заказу
      * @param cart
      * @param order
-     * @throws NoSavedInDbException
+     * @throws DAOException
      */
     @Override
-    public void createListGrocery(Cart cart, Order order) throws NoSavedInDbException {
+    public void createListGrocery(Cart cart, Order order) throws DAOException {
         for(Map.Entry entry : cart.getMap().entrySet()){
             ListGrocery listGrocery = new ListGrocery();
             listGrocery.setId(order.getGrocerylistid());
             listGrocery.setGroceryId(((Grocery)entry.getKey()).getId());
             listGrocery.setQuantity((int)entry.getValue());
 
-            if(!listGroceryHandler.create(listGrocery)){
-                throw new NoSavedInDbException();
-            }
+            listGroceryHandler.create(listGrocery);
         }
     }
 }

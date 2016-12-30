@@ -2,6 +2,7 @@ package Domain.Concrete;
 
 import Domain.Abstract.IRepositoryRole;
 import Domain.Entities.Role;
+import Domain.Exceptions.RoleException;
 import Tools.DatabaseManager;
 import Tools.Tool;
 import org.slf4j.Logger;
@@ -22,7 +23,7 @@ public class RoleSql implements IRepositoryRole {
     private static final Logger logger = LoggerFactory.getLogger(RoleSql.class);
 
     @Override
-    public List<Role> getAll() {
+    public List<Role> getAll() throws RoleException {
         List<Role> roleList = new ArrayList<>();
         try(Connection connection = DatabaseManager.getConnection();
             Statement statement = connection.createStatement();
@@ -35,13 +36,13 @@ public class RoleSql implements IRepositoryRole {
             }
         } catch (SQLException e) {
             logger.error("cant getAll",e);
-            e.printStackTrace();
+            throw new RoleException("Проблема с базой данных: невозможно получить записи из таблицы ролей!");
         }
         return roleList;
     }
 
     @Override
-    public Role getOne(UUID id) {
+    public Role getOne(UUID id) throws RoleException {
         Role role = null;
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement = connection.prepareStatement(ROLE_PREP_SELECTONE_QUERY)) {
@@ -56,13 +57,13 @@ public class RoleSql implements IRepositoryRole {
             resultSet.close();
         } catch (SQLException e) {
             logger.error("Cant getOne Role!", e);
-            e.printStackTrace();
+            throw new RoleException("Проблема с базой данных: невозможно получить запись из таблицы ролей!");
         }
         return role;
     }
 
     @Override
-    public boolean create(Role entity) {
+    public boolean create(Role entity) throws RoleException {
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement = connection.prepareStatement(ROLE_PREP_INSERT_QUERY);) {
             statement.setObject(1,entity.getId().toString());
@@ -70,28 +71,26 @@ public class RoleSql implements IRepositoryRole {
             statement.execute();
         } catch (SQLException e) {
             logger.error("cant create",e);
-            e.printStackTrace();
-            return false;
+            throw new RoleException("Проблема с базой данных: невозможно создать запись в таблице ролей!");
         }
         return true;
     }
 
     @Override
-    public boolean delete(UUID id) {
+    public boolean delete(UUID id) throws RoleException {
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement = connection.prepareStatement(ROLE_PREP_DELETE_QUERY);) {
             statement.setObject(1,id.toString());
             statement.execute();
         } catch (SQLException e) {
             logger.error("cant delete",e);
-            e.printStackTrace();
-            return false;
+            throw new RoleException("Проблема с базой данных: невозможно удалить запись из таблицы ролей!");
         }
         return true;
     }
 
     @Override
-    public boolean update(Role entity) {
+    public boolean update(Role entity) throws RoleException {
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement=connection.prepareStatement(ROLE_PREP_UPDATE_QUERY);) {
             statement.setObject(1,entity.getName());
@@ -99,14 +98,13 @@ public class RoleSql implements IRepositoryRole {
             statement.executeUpdate();
         } catch (SQLException e) {
             logger.error("cant update",e);
-            e.printStackTrace();
-            return false;
+            throw new RoleException("Проблема с базой данных: невозможно изменить запись в таблице ролей!");
         }
         return true;
     }
 
     @Override
-    public Role roleByRoleName(String roleName) {
+    public Role roleByRoleName(String roleName) throws RoleException {
         Role role = null;
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement = connection.prepareStatement(ROLE_PREP_SELECTONE_BY_NAME_QUERY)) {
@@ -121,7 +119,7 @@ public class RoleSql implements IRepositoryRole {
             resultSet.close();
         } catch (SQLException e) {
             logger.error("Cant getOne Role!", e);
-            e.printStackTrace();
+            throw new RoleException("Проблема с базой данных: невозможно получить запись из таблицы ролей!");
         }
         return role;
     }

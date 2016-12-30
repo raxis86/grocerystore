@@ -1,5 +1,6 @@
 package Controllers.CartController;
 
+import Domain.Exceptions.DAOException;
 import Services.Abstract.ICartService;
 import Services.Concrete.CartService;
 import Services.Models.Cart;
@@ -39,10 +40,16 @@ public class CartAdd extends HttpServlet {
             cart=new Cart();
             session.setAttribute("cart",cart);
         }
-        cartService.addToCart(cart,req.getParameter("groceryid"));
+        try {
+            cartService.addToCart(cart,req.getParameter("groceryid"));
+            RequestDispatcher rd=req.getRequestDispatcher("/GroceryListController");
+            rd.forward(req,resp);
+        } catch (DAOException e) {
+            req.setAttribute("message",e.getMessage());
+            RequestDispatcher rd=req.getRequestDispatcher("WEB-INF/exception.jsp");
+            rd.forward(req,resp);
+        }
 
-        RequestDispatcher rd=req.getRequestDispatcher("/GroceryListController");
-        rd.forward(req,resp);
     }
 
     @Override

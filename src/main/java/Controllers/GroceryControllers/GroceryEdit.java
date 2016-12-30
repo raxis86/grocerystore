@@ -1,8 +1,8 @@
 package Controllers.GroceryControllers;
 
+import Domain.Exceptions.DAOException;
 import Services.Abstract.IGroceryService;
 import Services.Concrete.GroceryService;
-import Services.Exceptions.NoSavedInDbException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,8 +32,9 @@ public class GroceryEdit extends HttpServlet {
                                          req.getParameter("quantity"));
             RequestDispatcher rd = req.getRequestDispatcher("/GroceryListAdmin");
             rd.forward(req,resp);
-        } catch (NoSavedInDbException e) {
-            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/savetodberror.jsp");
+        } catch (DAOException e) {
+            req.setAttribute("message",e.getMessage());
+            RequestDispatcher rd=req.getRequestDispatcher("WEB-INF/exception.jsp");
             rd.forward(req,resp);
         }
 
@@ -45,8 +46,14 @@ public class GroceryEdit extends HttpServlet {
 
         IGroceryService groceryService = new GroceryService();
 
-        req.setAttribute("grocery",groceryService.getGrocery(req.getParameter("groceryid")));
-        RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/groceryedit_admin.jsp");
-        rd.forward(req,resp);
+        try {
+            req.setAttribute("grocery",groceryService.getGrocery(req.getParameter("groceryid")));
+            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/groceryedit_admin.jsp");
+            rd.forward(req,resp);
+        } catch (DAOException e) {
+            req.setAttribute("message",e.getMessage());
+            RequestDispatcher rd=req.getRequestDispatcher("WEB-INF/exception.jsp");
+            rd.forward(req,resp);
+        }
     }
 }

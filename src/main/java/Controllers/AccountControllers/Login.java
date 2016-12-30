@@ -1,5 +1,7 @@
 package Controllers.AccountControllers;
 
+import Domain.Exceptions.DAOException;
+import Domain.Exceptions.UserException;
 import Services.Abstract.IAccountService;
 import Services.Abstract.IUserService;
 import Services.Concrete.AccountService;
@@ -44,6 +46,14 @@ public class Login extends HttpServlet{
         } catch (FormUserException e) {
             req.setAttribute("messages",e.getExceptionMessage().getMessagesError());
             doGet(req,resp);
+        } catch (UserException e) {
+            req.setAttribute("message",e.getMessage());
+            RequestDispatcher rd=req.getRequestDispatcher("WEB-INF/exception.jsp");
+            rd.forward(req,resp);
+        } catch (DAOException e) {
+            req.setAttribute("message",e.getMessage());
+            RequestDispatcher rd=req.getRequestDispatcher("WEB-INF/exception.jsp");
+            rd.forward(req,resp);
         }
 
         if(authUser!=null){

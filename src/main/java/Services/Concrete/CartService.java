@@ -3,6 +3,7 @@ package Services.Concrete;
 import Domain.Abstract.IRepositoryGrocery;
 import Domain.Concrete.GrocerySql;
 import Domain.Entities.Grocery;
+import Domain.Exceptions.DAOException;
 import Services.Abstract.ICartService;
 import Services.Models.Cart;
 import org.slf4j.Logger;
@@ -29,7 +30,7 @@ public class CartService implements ICartService {
      * @param groceryid - код продукта
      */
     @Override
-    public void addToCart(Cart cart, String groceryid) {
+    public void addToCart(Cart cart, String groceryid) throws DAOException {
         Grocery grocery = groceryHandler.getOne(UUID.fromString(groceryid));
         if(grocery!=null){
             cart.addItem(grocery,1);
@@ -42,7 +43,7 @@ public class CartService implements ICartService {
      * @param groceryid
      */
     @Override
-    public void removeFromCart(Cart cart, String groceryid) {
+    public void removeFromCart(Cart cart, String groceryid) throws DAOException {
         Grocery grocery = groceryHandler.getOne(UUID.fromString(groceryid));
         if(grocery!=null){
             cart.removeItem(grocery);

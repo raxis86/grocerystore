@@ -1,11 +1,13 @@
 package Controllers.AccountControllers;
 
+import Domain.Exceptions.DAOException;
+import Domain.Exceptions.RoleException;
+import Domain.Exceptions.UserException;
 import Services.Abstract.IAccountService;
 import Services.Abstract.IUserService;
 import Services.Concrete.AccountService;
 import Services.Concrete.UserService;
 import Services.Exceptions.FormUserException;
-import Services.Exceptions.NoSavedInDbException;
 import Services.Models.AuthUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,12 +54,21 @@ public class Signin extends HttpServlet {
                                                                   req.getParameter("address"),
                                                                   req.getParameter("phone"),
                                                                   "user"));
-        } catch (NoSavedInDbException e) {
-            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/savetodberror.jsp");
-            rd.forward(req,resp);
         } catch (FormUserException e) {
             req.setAttribute("messages",e.getExceptionMessage().getMessagesError());
             doGet(req,resp);
+        } catch (RoleException e) {
+            req.setAttribute("message",e.getMessage());
+            RequestDispatcher rd=req.getRequestDispatcher("WEB-INF/exception.jsp");
+            rd.forward(req,resp);
+        } catch (UserException e) {
+            req.setAttribute("message",e.getMessage());
+            RequestDispatcher rd=req.getRequestDispatcher("WEB-INF/exception.jsp");
+            rd.forward(req,resp);
+        } catch (DAOException e) {
+            req.setAttribute("message",e.getMessage());
+            RequestDispatcher rd=req.getRequestDispatcher("WEB-INF/exception.jsp");
+            rd.forward(req,resp);
         }
 
         if(authUser!=null){

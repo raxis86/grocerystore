@@ -1,7 +1,7 @@
 package Services.Abstract;
 
 import Domain.Entities.User;
-import Services.Exceptions.NoSavedInDbException;
+import Domain.Exceptions.DAOException;
 import Services.Models.AuthUser;
 
 
@@ -9,6 +9,6 @@ import Services.Models.AuthUser;
  * Created by raxis on 29.12.2016.
  */
 public interface IAccountService {
-    public AuthUser logIn(User user);
-    public AuthUser signIn(User user) throws NoSavedInDbException;
+    public AuthUser logIn(User user) throws DAOException;
+    public AuthUser signIn(User user) throws DAOException;
 }

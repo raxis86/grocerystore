@@ -1,5 +1,6 @@
 package Controllers.OrderControllers;
 
+import Domain.Exceptions.DAOException;
 import Services.Abstract.IOrderService;
 import Services.Concrete.OrderService;
 import org.slf4j.Logger;
@@ -24,9 +25,14 @@ public class OrderListAdmin extends HttpServlet{
 
         IOrderService orderService = new OrderService();
 
-        req.setAttribute("orderlist",orderService.formOrderViewListAdmin());
-
-        RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/orderlist_admin.jsp");
-        rd.forward(req,resp);
+        try {
+            req.setAttribute("orderlist",orderService.formOrderViewListAdmin());
+            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/orderlist_admin.jsp");
+            rd.forward(req,resp);
+        } catch (DAOException e) {
+            req.setAttribute("message",e.getMessage());
+            RequestDispatcher rd=req.getRequestDispatcher("WEB-INF/exception.jsp");
+            rd.forward(req,resp);
+        }
     }
 }

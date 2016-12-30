@@ -1,5 +1,6 @@
 package Controllers.GroceryControllers;
 
+import Domain.Exceptions.DAOException;
 import Services.Abstract.IGroceryService;
 import Services.Concrete.GroceryService;
 import org.slf4j.Logger;
@@ -24,10 +25,15 @@ public class GroceryListAdmin extends HttpServlet {
 
         IGroceryService groceryService = new GroceryService();
 
-        req.setAttribute("groceryList", groceryService.getGroceryList());
-
-        RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/grocerylist_admin.jsp");
-        rd.forward(req,resp);
+        try {
+            req.setAttribute("groceryList", groceryService.getGroceryList());
+            RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/grocerylist_admin.jsp");
+            rd.forward(req,resp);
+        } catch (DAOException e) {
+            req.setAttribute("message",e.getMessage());
+            RequestDispatcher rd=req.getRequestDispatcher("WEB-INF/exception.jsp");
+            rd.forward(req,resp);
+        }
     }
 
     @Override

@@ -1,6 +1,7 @@
 package Domain.Abstract;
 
 import Domain.Entities.Order;
+import Domain.Exceptions.OrderException;
 
 import java.util.List;
 import java.util.UUID;
@@ -13,5 +14,5 @@ import java.util.UUID;
 }*/
 
 public interface IRepositoryOrder extends IRepository<Order,UUID> {
-    public List<Order> getByUserId(UUID userid);
+    public List<Order> getByUserId(UUID userid) throws OrderException;
 }

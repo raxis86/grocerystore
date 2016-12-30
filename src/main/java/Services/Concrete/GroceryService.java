@@ -6,8 +6,8 @@ import Domain.Concrete.ListGrocerySql;
 import Domain.Concrete.GrocerySql;
 import Domain.Entities.Grocery;
 import Domain.Entities.ListGrocery;
+import Domain.Exceptions.DAOException;
 import Services.Abstract.IGroceryService;
-import Services.Exceptions.NoSavedInDbException;
 import Services.Models.Message;
 import javafx.util.converter.BigDecimalStringConverter;
 import org.slf4j.Logger;
@@ -33,17 +33,17 @@ public class GroceryService implements IGroceryService {
 
 
     @Override
-    public List<Grocery> getGroceryList() {
+    public List<Grocery> getGroceryList() throws DAOException {
         return groceryHandler.getAll();
     }
 
     @Override
-    public Grocery getGrocery(String groceryid) {
+    public Grocery getGrocery(String groceryid) throws DAOException {
         return groceryHandler.getOne(UUID.fromString(groceryid));
     }
 
     @Override
-    public void groceryCreate(String name, String price, String quantity) throws NoSavedInDbException {
+    public void groceryCreate(String name, String price, String quantity) throws DAOException {
         Grocery grocery = new Grocery();
 
         grocery.setId(UUID.randomUUID());
@@ -53,19 +53,15 @@ public class GroceryService implements IGroceryService {
         grocery.setPrice(new BigDecimalStringConverter().fromString(price));
         grocery.setQuantity(Integer.parseInt(quantity));
 
-        if(!groceryHandler.create(grocery)){
-            throw new NoSavedInDbException();
-        }
+        groceryHandler.create(grocery);
     }
 
     @Override
-    public void groceryDelete(String groceryid) throws NoSavedInDbException {
+    public void groceryDelete(String groceryid) throws DAOException {
         Grocery grocery = groceryHandler.getOne(UUID.fromString(groceryid));
         List<ListGrocery> listGroceries = listGroceryHandler.getListByGroceryId(grocery.getId());
 
-        if(!groceryHandler.delete(grocery.getId())){
-            throw new NoSavedInDbException();
-        }
+        groceryHandler.delete(grocery.getId());
 
         for(ListGrocery gl : listGroceries){
             listGroceryHandler.delete(gl.getId());
@@ -73,7 +69,7 @@ public class GroceryService implements IGroceryService {
     }
 
     @Override
-    public Message groceryUpdate(String groceryid, String name, String price, String quantity) throws NoSavedInDbException {
+    public Message groceryUpdate(String groceryid, String name, String price, String quantity) throws DAOException {
         Grocery grocery = groceryHandler.getOne(UUID.fromString(groceryid));
 
         if(grocery!=null){
@@ -81,9 +77,7 @@ public class GroceryService implements IGroceryService {
             grocery.setPrice(new BigDecimalStringConverter().fromString(price));
             grocery.setQuantity(Integer.parseInt(quantity));
 
-            if(!groceryHandler.update(grocery)){
-                throw new NoSavedInDbException();
-            }
+            groceryHandler.update(grocery);
 
             return new Message("Изменения успешно сохранены!", Message.Status.OK);
         }

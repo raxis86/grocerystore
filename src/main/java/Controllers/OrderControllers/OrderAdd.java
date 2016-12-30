@@ -1,13 +1,13 @@
 package Controllers.OrderControllers;
 
 import Domain.Entities.User;
+import Domain.Exceptions.DAOException;
 import Services.Abstract.IListGroceryService;
 import Services.Abstract.IOrderService;
 import Services.Abstract.IUserService;
 import Services.Concrete.ListGroceryService;
 import Services.Concrete.OrderService;
 import Services.Concrete.UserService;
-import Services.Exceptions.NoSavedInDbException;
 import Services.Models.Cart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,8 +74,9 @@ public class OrderAdd extends HttpServlet{
 
                 RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/ordersuccess.jsp");
                 rd.forward(req,resp);
-            } catch (NoSavedInDbException e) {
-                RequestDispatcher rd = req.getRequestDispatcher("WEB-INF/savetodberror.jsp");
+            } catch (DAOException e) {
+                req.setAttribute("message",e.getMessage());
+                RequestDispatcher rd=req.getRequestDispatcher("WEB-INF/exception.jsp");
                 rd.forward(req,resp);
             }
         }

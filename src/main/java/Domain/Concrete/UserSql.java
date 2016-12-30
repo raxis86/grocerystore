@@ -2,6 +2,7 @@ package Domain.Concrete;
 
 import Domain.Abstract.IRepositoryUser;
 import Domain.Entities.User;
+import Domain.Exceptions.UserException;
 import Tools.DatabaseManager;
 import Tools.Tool;
 import org.slf4j.Logger;
@@ -36,7 +37,7 @@ public class UserSql implements IRepositoryUser {
     }
 
     @Override
-    public List<User> getAll() {
+    public List<User> getAll() throws UserException {
         List<User> userList = new ArrayList<>();
         try(Connection connection = DatabaseManager.getConnection();
             Statement statement = connection.createStatement();
@@ -48,13 +49,13 @@ public class UserSql implements IRepositoryUser {
             }
         } catch (SQLException e) {
             logger.error("Select Users error!",e);
-            e.printStackTrace();
+            throw new UserException("Проблема с базой данных: невозможно получить записи из таблицы пользователей!");
         }
         return userList;
     }
 
     @Override
-    public User getOne(UUID id) {
+    public User getOne(UUID id) throws UserException {
         User usr = null;
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement = connection.prepareStatement(USER_PREP_SELECTONE_QUERY);) {
@@ -67,13 +68,13 @@ public class UserSql implements IRepositoryUser {
             resultSet.close();
         } catch (SQLException e) {
             logger.error("Cant getOne User!",e);
-            e.printStackTrace();
+            throw new UserException("Проблема с базой данных: невозможно получить запись из таблицы пользователей!");
         }
         return usr;
     }
 
     @Override
-    public boolean create(User entity) {
+    public boolean create(User entity) throws UserException {
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement = connection.prepareStatement(USER_PREP_INSERT_QUERY);) {
             statement.setObject(1,entity.getId().toString());
@@ -89,28 +90,26 @@ public class UserSql implements IRepositoryUser {
             statement.execute();
         } catch (SQLException e) {
             logger.error("Insert user error!", e);
-            e.printStackTrace();
-            return false;
+            throw new UserException("Проблема с базой данных: невозможно создать запись в таблице пользователей!");
         }
         return true;
     }
 
     @Override
-    public boolean delete(UUID id) {
+    public boolean delete(UUID id) throws UserException {
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement = connection.prepareStatement(USER_PREP_DELETE_QUERY);) {
             statement.setObject(1,id.toString());
             statement.execute();
         } catch (SQLException e) {
             logger.error("Cant delete User!",e);
-            e.printStackTrace();
-            return false;
+            throw new UserException("Проблема с базой данных: невозможно удалить запись из таблицы пользователей!");
         }
         return true;
     }
 
     @Override
-    public boolean update(User entity) {
+    public boolean update(User entity) throws UserException {
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement=connection.prepareStatement(USER_PREP_UPDATE_QUERY);) {
             statement.setObject(1,entity.getRoleID().toString());
@@ -126,14 +125,13 @@ public class UserSql implements IRepositoryUser {
             statement.executeUpdate();
         } catch (SQLException e) {
             logger.error("Cant update User!",e);
-            e.printStackTrace();
-            return false;
+            throw new UserException("Проблема с базой данных: невозможно изменить запись в таблице пользователей!");
         }
         return true;
     }
 
     @Override
-    public User getOne(String email, String passwordHash) {
+    public User getOne(String email, String passwordHash) throws UserException {
         User usr = null;
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement = connection.prepareStatement(USER_PREP_SELECTONE_BY_AUTH_QUERY)) {
@@ -147,13 +145,13 @@ public class UserSql implements IRepositoryUser {
             resultSet.close();
         } catch (SQLException e) {
             logger.error("Cant getOne User by auth info",e);
-            e.printStackTrace();
+            throw new UserException("Проблема с базой данных: невозможно получить запись из таблицы пользователей!");
         }
         return usr;
     }
 
     @Override
-    public User getOneByEmail(String email) {
+    public User getOneByEmail(String email) throws UserException {
         User usr = null;
         try(Connection connection = DatabaseManager.getConnection();
             PreparedStatement statement = connection.prepareStatement(USER_PREP_SELECTONE_BY_EMAIL_QUERY)) {
@@ -166,7 +164,7 @@ public class UserSql implements IRepositoryUser {
             resultSet.close();
         } catch (SQLException e) {
             logger.error("Cant getOne User by auth info",e);
-            e.printStackTrace();
+            throw new UserException("Проблема с базой данных: невозможно получить запись из таблицы пользователей!");
         }
         return usr;
     }
